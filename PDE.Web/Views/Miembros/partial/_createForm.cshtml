@@ -1,0 +1,72 @@
+﻿@model PDE.Models.Entities.Miembro
+        
+<form asp-action="Create">            
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label asp-for="Nombres" class="control-label"></label>
+                    <input asp-for="Nombres" readonly="true" class="form-control" />
+                    <span asp-validation-for="Nombres" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label asp-for="Apellidos" class="control-label"></label>
+                    <input asp-for="Apellidos" readonly="true" class="form-control" />
+                    <span asp-validation-for="Apellidos" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label asp-for="FechaNacimiento" class="control-label"></label>
+                    <input asp-for="FechaNacimiento" readonly="true"  class="form-control" />
+                    <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label asp-for="LugarNacimiento" class="control-label"></label>
+                    <input asp-for="LugarNacimiento" readonly="true" class="form-control" />
+                    <span asp-validation-for="LugarNacimiento" class="text-danger"></span>
+                </div>
+            </div>
+
+             <div class="row">
+               <div class="col-md-6 form-group">
+                    <label asp-for="SexoId" class="control-label">Sexo</label>
+                    @Html.DropDownListFor(model => model.SexoId, ViewBag.Sexo as SelectList,"",new { @class="form-control", @disabled ="true"})
+                    <span asp-validation-for="SexoId" class="text-danger"></span>
+                </div>
+               <div class="col-md-6 form-group">
+                    <label asp-for="EstadoCivilId" class="control-label">Estado Civil</label>
+                    @Html.DropDownListFor(model => model.EstadoCivilId, ViewBag.EstadoCivil as SelectList,"",new { @class="form-control", @disabled="true" })
+                    <span asp-validation-for="EstadoCivilId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label asp-for="Cedula" class="control-label"></label>
+                    <input asp-for="Cedula" readonly="true"  class="form-control" />
+                    <span asp-validation-for="Cedula" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 form-group">
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label asp-for="Celular" class="control-label"></label>
+                    <input asp-for="Celular" class="form-control" />
+                    <span asp-validation-for="Celular" class="text-danger"></span>
+                </div>
+               <div class="col-md-6 form-group">
+                    <label asp-for="CargoTerritorialId" class="control-label">Cargo Territorial</label>
+                    @Html.DropDownListFor(model => model.CargoTerritorialId, ViewBag.Cargos as SelectList,"--Seleccione un cargo--",new { @class="form-control" })
+                    <span asp-validation-for="CargoTerritorialId" class="text-danger"></span>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-md-3 form-group">
+                    <input type="submit" value="Agregar" class="btn btn-primary" />
+                </div>
+                <div class="col-md-9"></div>
+            </div>
+
+        </form>

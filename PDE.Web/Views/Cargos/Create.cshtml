@@ -1,0 +1,43 @@
+﻿@model PDE.Models.Entities.Cargo
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<h1 class="mt-4"></h1>
+<div class="card">
+    <div class="card-header">
+       <i class="fas fa-table me-1"></i>
+         Agregar Cargo
+    </div>
+   <div class="card-body">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label asp-for="Descripcion" class="control-label"></label>
+                    <input asp-for="Descripcion" class="form-control" />
+                    <span asp-validation-for="Descripcion" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+
+                </div>
+            </div>
+            <div class="row">
+                 <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="submit" value="Agregar" class="btn btn-primary" />
+                    </div>
+                </div>
+
+            </div>
+
+        </form>
+   </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

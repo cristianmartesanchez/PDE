@@ -1,0 +1,42 @@
+﻿
+
+@{
+    ViewData["Title"] = "Miembro - Create";
+}
+<h1 class="mt-4"></h1>
+<div class="card">
+    <div class="card-header">
+       <i class="fas fa-table me-1"></i>
+         Agregar Miembro
+    </div>
+   <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="input-group mb-3">
+                  <input type="text" id="txtCedula" class="form-control" placeholder="Buscar por Cedula" />
+                  <div class="input-group-append">
+                    <a class="btn btn-outline-secondary" id="buscarCedula"><i class="fa-solid fa-magnifying-glass"></i></a>
+                  </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+
+            </div>
+        </div>
+        <hr />
+        <div id="conteinerForm">
+
+        </div>
+   </div>
+</div>
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript" src="~/js/miembro.js" ></script>
+}
