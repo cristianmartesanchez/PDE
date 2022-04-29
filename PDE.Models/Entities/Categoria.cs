@@ -5,6 +5,11 @@ namespace PDE.Models.Entities
 {
     public partial class Categoria
     {
+        public Categoria()
+        {
+            Miembros = new HashSet<Miembro>();
+        }
+
         public int Id { get; set; }
         public string? Descripcion { get; set; }
         public string? LlevaColegio { get; set; }

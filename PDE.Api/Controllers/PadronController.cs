@@ -16,7 +16,7 @@ namespace PDE.Api.Controllers
     [ApiController]
     public class PadronController : ControllerBase
     {
-        //private readonly PadronContext _context;
+
         private readonly IUnitOfWork _unitOfWork;
 
         public PadronController(IUnitOfWork unitOfWork)
@@ -27,9 +27,9 @@ namespace PDE.Api.Controllers
 
 
         [HttpGet("GetByCedula/{cedula}")]
-        public IActionResult GetByCedula(string cedula)
+        public async Task<IActionResult>  GetByCedula(string cedula)
         {
-            var data =  _unitOfWork.Padron.GetPadron(cedula);
+            var data = await _unitOfWork.Padron.GetPadron(cedula);
 
             if (data == null)
             {

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PDE.DataAccess;
 using PDE.Models.Entities;
+using PDE.Models.Interfaces;
 
 namespace PDE.Api.Controllers
 {
@@ -15,25 +16,25 @@ namespace PDE.Api.Controllers
     [ApiController]
     public class MiembrosController : ControllerBase
     {
-        private readonly DBPDEContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public MiembrosController(DBPDEContext context)
+        public MiembrosController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: api/Miembros
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Miembro>>> GetMiembros()
+        public async Task<IEnumerable<Miembro>> GetMiembros()
         {
-            return await _context.Miembros.ToListAsync();
+            return await _unitOfWork.Miembros.GetAll();
         }
 
         // GET: api/Miembros/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Miembro>> GetMiembro(int id)
         {
-            var miembro = await _context.Miembros.FindAsync(id);
+            var miembro = await _unitOfWork.Miembros.GetById(id);
 
             if (miembro == null)
             {
@@ -43,8 +44,6 @@ namespace PDE.Api.Controllers
             return miembro;
         }
 
-        // PUT: api/Miembros/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMiembro(int id, Miembro miembro)
         {
@@ -53,15 +52,14 @@ namespace PDE.Api.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(miembro).State = EntityState.Modified;
-
+            _unitOfWork.Miembros.Update(miembro);
             try
             {
-                await _context.SaveChangesAsync();
+                await _unitOfWork.Save();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MiembroExists(id))
+                if (!await MiembroExists(id))
                 {
                     return NotFound();
                 }
@@ -74,13 +72,12 @@ namespace PDE.Api.Controllers
             return NoContent();
         }
 
-        // POST: api/Miembros
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+
         [HttpPost]
         public async Task<ActionResult<Miembro>> PostMiembro(Miembro miembro)
         {
-            _context.Miembros.Add(miembro);
-            await _context.SaveChangesAsync();
+            await _unitOfWork.Miembros.Add(miembro);
+            await _unitOfWork.Save();
 
             return CreatedAtAction("GetMiembro", new { id = miembro.Id }, miembro);
         }
@@ -89,21 +86,21 @@ namespace PDE.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMiembro(int id)
         {
-            var miembro = await _context.Miembros.FindAsync(id);
+            var miembro = await _unitOfWork.Miembros.GetById(id);
             if (miembro == null)
             {
                 return NotFound();
             }
 
-            _context.Miembros.Remove(miembro);
-            await _context.SaveChangesAsync();
+            _unitOfWork.Miembros.Remove(miembro);
+            await _unitOfWork.Save();
 
             return NoContent();
         }
 
-        private bool MiembroExists(int id)
+        private async Task<bool> MiembroExists(int id)
         {
-            return _context.Miembros.Any(e => e.Id == id);
+            return (await _unitOfWork.Miembros.GetAll()).Any(e => e.Id == id);
         }
     }
 }

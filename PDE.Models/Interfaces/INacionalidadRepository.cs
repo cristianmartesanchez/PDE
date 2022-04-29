@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace PDE.Models.Interfaces
 {
     public interface INacionalidadRepository : IGenericRepository<Nacionalidad>

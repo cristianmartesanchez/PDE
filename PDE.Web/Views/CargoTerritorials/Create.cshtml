@@ -4,31 +4,49 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-
-<h4>CargoTerritorial</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<h1 class="mt-4"></h1>
+<div class="card">
+    <div class="card-header">
+       <i class="fas fa-table me-1"></i>
+         Agregar Cargo Territoriales
+    </div>
+   <div class="card-body">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="CargoId" class="control-label"></label>
-                <select asp-for="CargoId" class ="form-control" asp-items="ViewBag.CargoId"></select>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="CargoId" class="control-label">Cargo</label>
+                        @Html.DropDownListFor(model => model.CargoId, ViewBag.CargoId as SelectList,"--Seleccione un cargo--",new { @class="form-control"})
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="CargoSupervisorId" class="control-label">Cargo Supervisor</label>
+                         @Html.DropDownListFor(model => model.CargoSupervisorId, ViewBag.SupervisorId as SelectList,"--Seleccione un cargo supervisor--",new { @class="form-control"})
+
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="SupervisorId" class="control-label"></label>
-                <select asp-for="SupervisorId" class ="form-control" asp-items="ViewBag.SupervisorId"></select>
+            <br />
+             <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="LocalidadId" class="control-label">Localidad</label>
+                        @Html.DropDownListFor(model => model.LocalidadId, ViewBag.LocalidadId as SelectList,"--Seleccione un localidad--",new { @class="form-control"})
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+                </div>
             </div>
+            <br />
             <div class="form-group">
-                <label asp-for="LocalidadId" class="control-label"></label>
-                <select asp-for="LocalidadId" class ="form-control" asp-items="ViewBag.LocalidadId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Agregar" class="btn btn-primary" />
             </div>
         </form>
-    </div>
+   </div>
 </div>
 
 <div>

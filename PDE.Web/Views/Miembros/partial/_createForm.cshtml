@@ -31,12 +31,12 @@
                <div class="col-md-6 form-group">
                     <label asp-for="SexoId" class="control-label">Sexo</label>
                     @Html.DropDownListFor(model => model.SexoId, ViewBag.Sexo as SelectList,"",new { @class="form-control", @disabled ="true"})
-                    <span asp-validation-for="SexoId" class="text-danger"></span>
+                    <input asp-for="SexoId" type="hidden" class="form-control" />
                 </div>
                <div class="col-md-6 form-group">
                     <label asp-for="EstadoCivilId" class="control-label">Estado Civil</label>
                     @Html.DropDownListFor(model => model.EstadoCivilId, ViewBag.EstadoCivil as SelectList,"",new { @class="form-control", @disabled="true" })
-                    <span asp-validation-for="EstadoCivilId" class="text-danger"></span>
+                    <input asp-for="EstadoCivilId" type="hidden" class="form-control" />
                 </div>
             </div>
             <div class="row">
@@ -46,19 +46,65 @@
                     <span asp-validation-for="Cedula" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 form-group">
-
+                    <label asp-for="NacionalidadId" class="control-label">Nacionalidad</label>
+                    <input asp-for="NacionalidadId" type="hidden" class="form-control" />
+                    <input value="@Model.Nacionalidad.Descripcion" class="form-control" readonly="readonly" />
+                </div>
+            </div>
+              <div class="row">
+                <div class="col-md-6 form-group">
+                    <label asp-for="OcupacionId" class="control-label">Ocupación</label>
+                    <input value="@Model.Ocupacion.Descripcion" readonly="readonly"  class="form-control" />
+                    <input asp-for="OcupacionId" type="hidden" class="form-control" />
+                </div>
+                <div class="col-md-6 form-group">
+                    <label asp-for="CategoriaId" class="control-label">Categoria</label>
+                    <input value="@Model.Categoria.Descripcion" class="form-control" readonly="readonly" />
                 </div>
             </div>
             <div class="row">
+                 <div class="col-md-6 form-group">
+                    <label asp-for="MunicipioId" class="control-label">Municipio</label>
+                    <input asp-for="MunicipioId" type="hidden" class="form-control" />
+                    <input value="@Model.Municipio.Descripcion" class="form-control" readonly="readonly" />
+                </div>
                 <div class="col-md-6 form-group">
+                    <label  class="control-label">Provincia</label>
+                    <input value="@Model.Municipio.Provincia.Descripcion" class="form-control" readonly="readonly" />                    
+                </div>
+            </div>
+             <div class="row">
+                 <div class="col-md-6 form-group">
+                    <label asp-for="ColegioId" class="control-label">Colegio</label>
+                    <input asp-for="ColegioId" type="hidden" class="form-control" />
+                    <input value="@Model.Colegio.Descripcion" class="form-control" readonly="readonly" />
+                </div>
+                <div class="col-md-6 form-group">
+                    <label  class="control-label">Recinto</label>
+                    <input value="@Model.Colegio.Recinto.CodigoRecinto" class="form-control" readonly="readonly" />                    
+                </div>
+            </div>
+            <div class="row">
+                 <div class="col-md-6 form-group">
                     <label asp-for="Celular" class="control-label"></label>
-                    <input asp-for="Celular" class="form-control" />
+                    <input asp-for="Celular" class="form-control" autocomplete="off" />
                     <span asp-validation-for="Celular" class="text-danger"></span>
                 </div>
-               <div class="col-md-6 form-group">
-                    <label asp-for="CargoTerritorialId" class="control-label">Cargo Territorial</label>
-                    @Html.DropDownListFor(model => model.CargoTerritorialId, ViewBag.Cargos as SelectList,"--Seleccione un cargo--",new { @class="form-control" })
-                    <span asp-validation-for="CargoTerritorialId" class="text-danger"></span>
+                <div class="col-md-6 form-group">
+                    <label  class="control-label">Localidad</label>
+                    @Html.DropDownList("LocalidadId", ViewBag.Localidad as SelectList,"",new { @class="form-control" })
+                </div>
+            </div>
+            <div class="row">
+                 <div class="col-md-6 form-group">
+                    <label asp-for="CargoId" class="control-label">Cargo Territorial</label>
+                    <select asp-for="CargoId" class="form-control"></select>
+                    <span asp-validation-for="CargoId" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label asp-for="SupervisorId" class="control-label">Supervisor</label>                    
+                    <select asp-for="SupervisorId" class="form-control"></select>
+                    <span asp-validation-for="SupervisorId" class="text-danger"></span>
                 </div>
             </div>
             <hr />

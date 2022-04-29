@@ -13,69 +13,48 @@ namespace PDE.Web.Controllers
 {
     public class CargoTerritorialsController : Controller
     {
-        private readonly DBPDEContext _context;
 
         private readonly IUnitOfWork _unitWork;
 
-        public CargoTerritorialsController(DBPDEContext context, IUnitOfWork unitWork)
+        public CargoTerritorialsController(IUnitOfWork unitWork)
         {
-            _context = context;
             _unitWork = unitWork;
         }
 
         // GET: CargoTerritorials
         public async Task<IActionResult> Index()
         {
-            var data = _unitWork.CargosTerritoriales.GetCargosTerritoriales();
-            return View(await data.ToListAsync());
+            var data = await _unitWork.CargosTerritoriales.GetCargoTerritoriales().ToListAsync();
+            return View(data);
         }
 
-        // GET: CargoTerritorials/Details/5
-        public async Task<IActionResult> Details(int? id)
+        async Task DropDown()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var cargoTerritorial = await _context.CargoTerritorials
-                .Include(c => c.Cargo)
-                .Include(c => c.Localidad)
-                .Include(c => c.Supervisor)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (cargoTerritorial == null)
-            {
-                return NotFound();
-            }
-
-            return View(cargoTerritorial);
+            ViewBag.CargoId = new SelectList(await _unitWork.Cargo.GetAll(), "Id", "Descripcion");
+            ViewBag.LocalidadId = new SelectList(await _unitWork.Localidad.GetAll(), "Id", "Nombre");
+            ViewBag.SupervisorId = new SelectList(await _unitWork.Cargo.GetAll(), "Id", "Descripcion");
         }
 
         // GET: CargoTerritorials/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["CargoId"] = new SelectList(_context.Cargos, "Id", "Descripcion");
-            ViewData["LocalidadId"] = new SelectList(_context.Localidads, "Id", "Nombre");
-            ViewData["SupervisorId"] = new SelectList(_context.Cargos, "Id", "Descripcion");
+            DropDown();
             return View();
         }
 
-        // POST: CargoTerritorials/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CargoTerritorial cargoTerritorial)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(cargoTerritorial);
-                await _context.SaveChangesAsync();
+                _unitWork.CargosTerritoriales.Add(cargoTerritorial);
+                await _unitWork.Save();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CargoId"] = new SelectList(_context.Cargos, "Id", "Descripcion", cargoTerritorial.CargoId);
-            ViewData["LocalidadId"] = new SelectList(_context.Localidads, "Id", "Nombre", cargoTerritorial.LocalidadId);
-            ViewData["SupervisorId"] = new SelectList(_context.Cargos, "Id", "Descripcion", cargoTerritorial.SupervisorId);
+
+            DropDown();
             return View(cargoTerritorial);
         }
 
@@ -87,23 +66,20 @@ namespace PDE.Web.Controllers
                 return NotFound();
             }
 
-            var cargoTerritorial = await _context.CargoTerritorials.FindAsync(id);
+            var cargoTerritorial = await _unitWork.CargosTerritoriales.GetById(id.Value);
             if (cargoTerritorial == null)
             {
                 return NotFound();
             }
-            ViewData["CargoId"] = new SelectList(_context.Cargos, "Id", "Descripcion", cargoTerritorial.CargoId);
-            ViewData["LocalidadId"] = new SelectList(_context.Localidads, "Id", "Nombre", cargoTerritorial.LocalidadId);
-            ViewData["SupervisorId"] = new SelectList(_context.Cargos, "Id", "Descripcion", cargoTerritorial.SupervisorId);
+            ViewBag.CargoId = new SelectList(await _unitWork.Cargo.GetAll(), "Id", "Descripcion");
+            ViewBag.LocalidadId = new SelectList(await _unitWork.Localidad.GetAll(), "Id", "Nombre");
+            ViewBag.SupervisorId = new SelectList(await _unitWork.Cargo.GetAll(), "Id", "Descripcion");
             return View(cargoTerritorial);
         }
 
-        // POST: CargoTerritorials/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CargoId,SupervisorId,LocalidadId")] CargoTerritorial cargoTerritorial)
+        public async Task<IActionResult> Edit(int id, CargoTerritorial cargoTerritorial)
         {
             if (id != cargoTerritorial.Id)
             {
@@ -114,12 +90,12 @@ namespace PDE.Web.Controllers
             {
                 try
                 {
-                    _context.Update(cargoTerritorial);
-                    await _context.SaveChangesAsync();
+                    _unitWork.CargosTerritoriales.Update(cargoTerritorial);
+                    await _unitWork.Save();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CargoTerritorialExists(cargoTerritorial.Id))
+                    if (!await CargoTerritorialExists(cargoTerritorial.Id))
                     {
                         return NotFound();
                     }
@@ -130,47 +106,27 @@ namespace PDE.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CargoId"] = new SelectList(_context.Cargos, "Id", "Descripcion", cargoTerritorial.CargoId);
-            ViewData["LocalidadId"] = new SelectList(_context.Localidads, "Id", "Nombre", cargoTerritorial.LocalidadId);
-            ViewData["SupervisorId"] = new SelectList(_context.Cargos, "Id", "Descripcion", cargoTerritorial.SupervisorId);
+            ViewBag.CargoId = new SelectList(await _unitWork.Cargo.GetAll(), "Id", "Descripcion");
+            ViewBag.LocalidadId = new SelectList(await _unitWork.Localidad.GetAll(), "Id", "Nombre");
+            ViewBag.SupervisorId = new SelectList(await _unitWork.Cargo.GetAll(), "Id", "Descripcion");
             return View(cargoTerritorial);
         }
 
-        // GET: CargoTerritorials/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var cargoTerritorial = await _context.CargoTerritorials
-                .Include(c => c.Cargo)
-                .Include(c => c.Localidad)
-                .Include(c => c.Supervisor)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (cargoTerritorial == null)
-            {
-                return NotFound();
-            }
-
-            return View(cargoTerritorial);
-        }
 
         // POST: CargoTerritorials/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cargoTerritorial = await _context.CargoTerritorials.FindAsync(id);
-            _context.CargoTerritorials.Remove(cargoTerritorial);
-            await _context.SaveChangesAsync();
+            var cargoTerritorial = await _unitWork.CargosTerritoriales.GetById(id);
+            _unitWork.CargosTerritoriales.Remove(cargoTerritorial);
+            await _unitWork.Save();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CargoTerritorialExists(int id)
+        private async Task<bool> CargoTerritorialExists(int id)
         {
-            return _context.CargoTerritorials.Any(e => e.Id == id);
+            return (await _unitWork.CargosTerritoriales.GetAll()).Any(e => e.Id == id);
         }
     }
 }

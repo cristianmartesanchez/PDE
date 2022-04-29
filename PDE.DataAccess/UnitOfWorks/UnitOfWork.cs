@@ -2,10 +2,8 @@
 using PDE.DataAccess.Repositories.Padron;
 using PDE.Models.Interfaces;
 using PDE.Models.Interfaces.Padron;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using PDE.Persistence;
+using PDE.Persistence.Padron;
 using System.Threading.Tasks;
 
 namespace PDE.DataAccess
@@ -29,6 +27,8 @@ namespace PDE.DataAccess
             Sexo = new SexoRepository(_context);
             EstadoCivil = new EstadoCivilRepository(_context);
             Cargo = new CargoRepository(_context);
+            Localidad = new LocalidadRepository(_context);
+            Provincia = new ProvinciaRepository(_context);
         }
 
         public IPadronRepository Padron { get;  }
@@ -42,6 +42,8 @@ namespace PDE.DataAccess
         public ISexoRepository Sexo { get; set; }
         public IEstadoCivilRepository EstadoCivil { get; set; }
         public ICargoRepository Cargo { get; set; }
+        public ILocalidadRepository Localidad { get; set; }
+        public IProvinciaRepository Provincia { get; set; }
 
         public void Dispose()
         {

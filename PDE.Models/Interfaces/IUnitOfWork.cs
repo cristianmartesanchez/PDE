@@ -20,6 +20,8 @@ namespace PDE.Models.Interfaces
         ISexoRepository Sexo { get; set; }
         IEstadoCivilRepository EstadoCivil { get; set; }
         ICargoRepository Cargo { get; set; }
+        ILocalidadRepository Localidad { get; set; }
+        IProvinciaRepository Provincia { get; set; }
         Task Save();
     }
 }

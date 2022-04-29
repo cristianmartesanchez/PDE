@@ -9,6 +9,8 @@ namespace PDE.Models.Interfaces
 {
     public interface ICargosTerritorialesRepository : IGenericRepository<CargoTerritorial>
     {
-        IQueryable<CargoTerritorial> GetCargosTerritoriales(int? supervisorId = null);
+        IQueryable<CargoTerritorial> GetCargosBySupervisor(int? cargoSupervisorId = null);
+        IQueryable<CargoTerritorial> GetCargoTerritoriales();
+        IEnumerable<CargoTerritorial> GetCargosByLocalidad(int LocalidadId);
     }
 }

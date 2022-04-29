@@ -21,21 +21,21 @@ namespace PDE.Web.Controllers
         }
 
         // GET: Cargos
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
            
-            return View(_unitWork.Cargo.GetAll());
+            return View(await _unitWork.Cargo.GetAll());
         }
 
         // GET: Cargos/Details/5
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var cargo = _unitWork.Cargo.GetById(id.Value);
+            var cargo = await _unitWork.Cargo.GetById(id.Value);
             if (cargo == null)
             {
                 return NotFound();
@@ -50,16 +50,14 @@ namespace PDE.Web.Controllers
             return View();
         }
 
-        // POST: Cargos/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Cargo cargo)
         {
             if (ModelState.IsValid)
             {
-                _unitWork.Cargo.Add(cargo);
+                await _unitWork.Cargo.Add(cargo);
                 await _unitWork.Save();
                 return RedirectToAction(nameof(Index));
             }
@@ -67,14 +65,14 @@ namespace PDE.Web.Controllers
         }
 
         // GET: Cargos/Edit/5
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var cargo = _unitWork.Cargo.GetById(id.Value);
+            var cargo = await _unitWork.Cargo.GetById(id.Value);
             if (cargo == null)
             {
                 return NotFound();
@@ -82,9 +80,7 @@ namespace PDE.Web.Controllers
             return View(cargo);
         }
 
-        // POST: Cargos/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Cargo cargo)
@@ -103,7 +99,7 @@ namespace PDE.Web.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CargoExists(cargo.Id))
+                    if (!await CargoExists(cargo.Id))
                     {
                         return NotFound();
                     }
@@ -118,14 +114,14 @@ namespace PDE.Web.Controllers
         }
 
         // GET: Cargos/Delete/5
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var cargo =  _unitWork.Cargo.GetById(id.Value);
+            var cargo = await _unitWork.Cargo.GetById(id.Value);
             if (cargo == null)
             {
                 return NotFound();
@@ -139,15 +135,17 @@ namespace PDE.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cargo =  _unitWork.Cargo.GetById(id);
+            var cargo = await _unitWork.Cargo.GetById(id);
             _unitWork.Cargo.Remove(cargo);
             await _unitWork.Save();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CargoExists(int id)
+        private async Task<bool> CargoExists(int id)
         {
-            return _unitWork.Cargo.GetAll().Any(e => e.Id == id);
+            var cargos = await _unitWork.Cargo.GetAll();
+
+            return cargos.Any(a => a.Id == id);
         }
     }
 }

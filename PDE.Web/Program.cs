@@ -1,7 +1,14 @@
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using PDE.DataAccess;
 using PDE.DataAccess.Repositories;
 using PDE.Models.Interfaces;
+using PDE.Persistence;
+using PDE.Persistence.Padron;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +23,21 @@ builder.Services.AddDbContext<PadronContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("PadronContext")));
 
+builder.Services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
+
 builder.Services.AddTransient(typeof(IUnitOfWork), typeof(UnitOfWork));
 
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(100);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 
 var app = builder.Build();
@@ -35,10 +55,17 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseSession();
+
 app.UseAuthorization();
+
+
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Login}");
 
 app.Run();

@@ -3,6 +3,11 @@ using Microsoft.Extensions.DependencyInjection;
 using PDE.DataAccess.Repositories;
 using PDE.Models.Interfaces;
 using PDE.DataAccess;
+using PDE.Persistence;
+using PDE.Persistence.Padron;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +25,11 @@ builder.Services.AddDbContext<DBPDEContext>(options =>
 builder.Services.AddDbContext<PadronContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("PadronContext")));
+
+builder.Services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
 
 builder.Services.AddTransient(typeof(IUnitOfWork), typeof(UnitOfWork));
 

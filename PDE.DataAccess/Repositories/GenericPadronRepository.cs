@@ -1,5 +1,8 @@
-﻿using PDE.Models.Entities.Padron;
+﻿using Microsoft.EntityFrameworkCore;
+using PDE.Models.Entities.Padron;
 using PDE.Models.Interfaces;
+using PDE.Persistence;
+using PDE.Persistence.Padron;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,29 +20,29 @@ namespace PDE.DataAccess.Repositories
             _context = context;
         }
 
-        public void Add(T entity)
+        public async Task Add(T entity)
         {
-            _context.Set<T>().Add(entity);
+            await _context.Set<T>().AddAsync(entity);
         }
 
-        public void AddRange(IEnumerable<T> entities)
+        public async Task AddRange(IEnumerable<T> entities)
         {
-            _context.Set<T>().AddRange(entities);
+            await _context.Set<T>().AddRangeAsync(entities);
         }
 
-        public IEnumerable<T> Find(Expression<Func<T, bool>> expression)
+        public async Task<IEnumerable<T>> Find(Expression<Func<T, bool>> expression)
         {
-            return _context.Set<T>().Where(expression);
+            return await _context.Set<T>().Where(expression).ToListAsync();
         }
 
-        public IEnumerable<T> GetAll()
+        public async Task<IEnumerable<T>> GetAll()
         {
-            return _context.Set<T>().ToList();
+            return await _context.Set<T>().ToListAsync();
         }
 
-        public T GetById(int id)
+        public async Task<T> GetById(int id)
         {
-            return _context.Set<T>().Find(id);
+            return await _context.Set<T>().FindAsync(id);
         }
 
         public void Remove(T entity)
@@ -54,7 +57,7 @@ namespace PDE.DataAccess.Repositories
 
         public void Update(T entity)
         {
-            throw new NotImplementedException();
+            _context.Set<T>().Update(entity);
         }
     }
 }

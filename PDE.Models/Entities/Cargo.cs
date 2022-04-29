@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace PDE.Models.Entities
 {
@@ -7,14 +8,16 @@ namespace PDE.Models.Entities
     {
         public Cargo()
         {
-            CargoTerritorialCargos = new HashSet<CargoTerritorial>();
             CargoTerritorialSupervisors = new HashSet<CargoTerritorial>();
+            CargoTerritoriales = new HashSet<CargoTerritorial>();
+            Miembros = new HashSet<Miembro>();
         }
 
         public int Id { get; set; }
-        public string Descripcion { get; set; } = null!;
+        public string Descripcion { get; set; }
 
-        public virtual ICollection<CargoTerritorial> CargoTerritorialCargos { get; set; }
         public virtual ICollection<CargoTerritorial> CargoTerritorialSupervisors { get; set; }
+        public virtual ICollection<CargoTerritorial> CargoTerritoriales { get; set; }
+        public virtual ICollection<Miembro> Miembros { get; set;}
     }
 }

@@ -9,12 +9,12 @@ namespace PDE.Models.Interfaces
 {
     public interface IGenericRepository<T> where T : class
     {
-        T GetById(int id);
-        IEnumerable<T> GetAll();
-        IEnumerable<T> Find(Expression<Func<T, bool>> expression);
-        void Add(T entity);
+        Task<T> GetById(int id);
+        Task<IEnumerable<T>> GetAll();
+        Task<IEnumerable<T>> Find(Expression<Func<T, bool>> expression);
+        Task Add(T entity);
         void Update(T entity);
-        void AddRange(IEnumerable<T> entities);
+        Task AddRange(IEnumerable<T> entities);
         void Remove(T entity);
         void RemoveRange(IEnumerable<T> entities);
     }

@@ -2,9 +2,9 @@
 
 #nullable disable
 
-namespace PDE.DataAccess.Migrations
+namespace PDE.Persistence.Migrations
 {
-    public partial class NuevoModelos2 : Migration
+    public partial class campoNulos : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

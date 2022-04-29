@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using PDE.Models.Entities.Padron;
 
-namespace PDE.DataAccess
+
+namespace PDE.Persistence.Padron
 {
     public partial class PadronContext : DbContext
     {
 
-        public PadronContext() { }
 
         public PadronContext(DbContextOptions<PadronContext> options)
             : base(options)
@@ -35,7 +35,7 @@ namespace PDE.DataAccess
         public virtual DbSet<NuevosDesempadronado> NuevosDesempadronados { get; set; } = null!;
         public virtual DbSet<NuevosEmpadronado> NuevosEmpadronados { get; set; } = null!;
         public virtual DbSet<Ocupacion> Ocupacions { get; set; } = null!;
-        public virtual DbSet<Padron> Padrons { get; set; } = null!;
+        public virtual DbSet<Models.Entities.Padron.Padron> Padrons { get; set; } = null!;
         public virtual DbSet<Provincium> Provincia { get; set; } = null!;
         public virtual DbSet<Recinto> Recintos { get; set; } = null!;
         public virtual DbSet<Region> Regions { get; set; } = null!;
@@ -174,7 +174,7 @@ namespace PDE.DataAccess
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.Property(e => e.Idprovincia).HasColumnName("IDProvincia");
+                entity.Property(e => e.Idprovincia).HasColumnName("ProvinciaId");
 
                 entity.Property(e => e.RegId).HasColumnName("RegID");
             });
@@ -657,13 +657,13 @@ namespace PDE.DataAccess
                 entity.Property(e => e.RegId).HasColumnName("RegID");
             });
 
-            modelBuilder.Entity<EstadoCivil>(entity =>
+            modelBuilder.Entity<Models.Entities.Padron.EstadoCivil>(entity =>
             {
                 entity.HasNoKey();
 
                 entity.ToTable("EstadoCivil");
 
-                entity.Property(e => e.Descripcion)
+                entity.Property<string>(e => e.Descripcion)
                     .HasMaxLength(15)
                     .IsUnicode(false);
 
@@ -834,7 +834,7 @@ namespace PDE.DataAccess
                     .IsFixedLength();
             });
 
-            modelBuilder.Entity<Padron>(entity =>
+            modelBuilder.Entity<PDE.Models.Entities.Padron.Padron>(entity =>
             {
                 entity.HasKey(e => e.Cedula);
 

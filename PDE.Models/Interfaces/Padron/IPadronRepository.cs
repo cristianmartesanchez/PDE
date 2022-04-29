@@ -10,6 +10,6 @@ namespace PDE.Models.Interfaces.Padron
 {
     public interface IPadronRepository : IGenericRepository<P.Padron>
     {
-        public Miembro GetPadron(string cedula);
+        public Task<Miembro> GetPadron(string cedula);
     }
 }
