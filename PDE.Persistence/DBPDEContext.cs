@@ -36,13 +36,14 @@ namespace PDE.Persistence
         public virtual DbSet<SectorParaje> SectorParajes { get; set; } = null!;
         public virtual DbSet<Sexo> Sexos { get; set; } = null!;
         public virtual DbSet<Zona> Zonas { get; set; } = null!;
+        public virtual DbSet<Estructura> Estructuras { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=DESKTOP-35GKIRV;Database=dbPDE01;Trusted_Connection=True;MultipleActiveResultSets=true");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-35GKIRV;Database=db_PDE01;Trusted_Connection=True;MultipleActiveResultSets=true");
             }
         }
 
@@ -179,11 +180,6 @@ namespace PDE.Persistence
 
                 entity.Property(e => e.Nombres).HasMaxLength(50);
 
-                entity.HasOne(d => d.Cargo)
-                    .WithMany(p => p.Miembros)
-                    .HasForeignKey(d => d.CargoId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Miembro_Cargo");
 
                 entity.HasOne(d => d.Categoria)
                     .WithMany(p => p.Miembros)

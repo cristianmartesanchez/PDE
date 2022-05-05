@@ -29,6 +29,7 @@ namespace PDE.DataAccess
             Cargo = new CargoRepository(_context);
             Localidad = new LocalidadRepository(_context);
             Provincia = new ProvinciaRepository(_context);
+            Estructura = new EstructuraRepository(_context);
         }
 
         public IPadronRepository Padron { get;  }
@@ -44,6 +45,7 @@ namespace PDE.DataAccess
         public ICargoRepository Cargo { get; set; }
         public ILocalidadRepository Localidad { get; set; }
         public IProvinciaRepository Provincia { get; set; }
+        public IEstructuraRepository Estructura { get; set; }
 
         public void Dispose()
         {

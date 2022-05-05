@@ -10,7 +10,6 @@ namespace PDE.Models.Entities
         {
             CargoTerritorialSupervisors = new HashSet<CargoTerritorial>();
             CargoTerritoriales = new HashSet<CargoTerritorial>();
-            Miembros = new HashSet<Miembro>();
         }
 
         public int Id { get; set; }
@@ -18,6 +17,6 @@ namespace PDE.Models.Entities
 
         public virtual ICollection<CargoTerritorial> CargoTerritorialSupervisors { get; set; }
         public virtual ICollection<CargoTerritorial> CargoTerritoriales { get; set; }
-        public virtual ICollection<Miembro> Miembros { get; set;}
+
     }
 }

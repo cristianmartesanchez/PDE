@@ -43,7 +43,6 @@
                 $("#SupervisorId").find('option').remove();
                 $("#SupervisorId").append('<option >--Seleccione un cargo territorial--</option>');
                 $(data).each(function (i, v) {
-                    console.log(v.cargo);
                     $("#CargoId").append('<option value="' + v.cargo.id + '">' + v.cargo.descripcion + '</option>');
                 })
 
@@ -54,12 +53,14 @@
 
     $("body").on("change", "#CargoId", function (e) {
 
-        let cargoTerritorialId = $(this).val();
+        let cargoId = $(this).val();
+        let localidadId = $("#LocalidadId").val();
+        let provinciaId = $("#ProvinciaId").val();
 
         $.ajax({
             method: "GET",
             url: "/Miembros/GetSupervisorByCargo/",
-            data: { cargoId: cargoTerritorialId },
+            data: { CargoId: cargoId, LocalidadId: localidadId },
             dataType: "Json"
         })
             .done(function (data) {

@@ -53,10 +53,15 @@ namespace PDE.Persistence.Migrations
                     b.Property<int?>("CargoSupervisorId")
                         .HasColumnType("int");
 
+                    b.Property<int>("EstructuraId")
+                        .HasColumnType("int");
+
                     b.Property<int>("LocalidadId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EstructuraId");
 
                     b.HasIndex(new[] { "CargoId" }, "IX_CargoTerritorial_CargoId");
 
@@ -231,6 +236,22 @@ namespace PDE.Persistence.Migrations
                     b.ToTable("EstadoCiviles");
                 });
 
+            modelBuilder.Entity("PDE.Models.Entities.Estructura", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Estructuras");
+                });
+
             modelBuilder.Entity("PDE.Models.Entities.Localidad", b =>
                 {
                     b.Property<int>("Id")
@@ -302,8 +323,14 @@ namespace PDE.Persistence.Migrations
                     b.Property<int?>("EstadoCivilId")
                         .HasColumnType("int");
 
+                    b.Property<int>("EstructuraId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("FechaNacimiento")
                         .HasColumnType("datetime");
+
+                    b.Property<int>("LocalidadId")
+                        .HasColumnType("int");
 
                     b.Property<string>("LugarNacimiento")
                         .HasColumnType("nvarchar(max)");
@@ -336,6 +363,10 @@ namespace PDE.Persistence.Migrations
                     b.HasIndex("ColegioId");
 
                     b.HasIndex("EstadoCivilId");
+
+                    b.HasIndex("EstructuraId");
+
+                    b.HasIndex("LocalidadId");
 
                     b.HasIndex("MunicipioId");
 
@@ -693,6 +724,12 @@ namespace PDE.Persistence.Migrations
                         .HasForeignKey("CargoSupervisorId")
                         .HasConstraintName("FK_CargoTerritorial_SupervisorId");
 
+                    b.HasOne("PDE.Models.Entities.Estructura", "Estructura")
+                        .WithMany()
+                        .HasForeignKey("EstructuraId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PDE.Models.Entities.Localidad", "Localidad")
                         .WithMany("CargoTerritorials")
                         .HasForeignKey("LocalidadId")
@@ -702,6 +739,8 @@ namespace PDE.Persistence.Migrations
                     b.Navigation("Cargo");
 
                     b.Navigation("CargoSupervisor");
+
+                    b.Navigation("Estructura");
 
                     b.Navigation("Localidad");
                 });
@@ -750,10 +789,10 @@ namespace PDE.Persistence.Migrations
             modelBuilder.Entity("PDE.Models.Entities.Miembro", b =>
                 {
                     b.HasOne("PDE.Models.Entities.Cargo", "Cargo")
-                        .WithMany("Miembros")
+                        .WithMany()
                         .HasForeignKey("CargoId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Miembro_Cargo");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("PDE.Models.Entities.Categoria", "Categoria")
                         .WithMany("Miembros")
@@ -769,6 +808,18 @@ namespace PDE.Persistence.Migrations
                         .WithMany("Miembros")
                         .HasForeignKey("EstadoCivilId")
                         .HasConstraintName("FK_Miembro_EstadoCiviles");
+
+                    b.HasOne("PDE.Models.Entities.Estructura", "Estructura")
+                        .WithMany()
+                        .HasForeignKey("EstructuraId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PDE.Models.Entities.Localidad", "Localidad")
+                        .WithMany("Miembros")
+                        .HasForeignKey("LocalidadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("PDE.Models.Entities.Municipio", "Municipio")
                         .WithMany("Miembros")
@@ -802,6 +853,10 @@ namespace PDE.Persistence.Migrations
                     b.Navigation("Colegio");
 
                     b.Navigation("EstadoCivil");
+
+                    b.Navigation("Estructura");
+
+                    b.Navigation("Localidad");
 
                     b.Navigation("Municipio");
 
@@ -877,8 +932,6 @@ namespace PDE.Persistence.Migrations
                     b.Navigation("CargoTerritorialSupervisors");
 
                     b.Navigation("CargoTerritoriales");
-
-                    b.Navigation("Miembros");
                 });
 
             modelBuilder.Entity("PDE.Models.Entities.Categoria", b =>
@@ -909,6 +962,8 @@ namespace PDE.Persistence.Migrations
             modelBuilder.Entity("PDE.Models.Entities.Localidad", b =>
                 {
                     b.Navigation("CargoTerritorials");
+
+                    b.Navigation("Miembros");
                 });
 
             modelBuilder.Entity("PDE.Models.Entities.MacroRegion", b =>

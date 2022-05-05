@@ -25,22 +25,28 @@ namespace PDE.DataAccess.Repositories
             return data;
         }
 
+
         public IQueryable<Miembro> GetMiembros()
         {
            
             var data =  (from a in _context.Miembros
                         join b in _context.Miembros on a.SupervisorId equals b.Id into c
                         from d in c.DefaultIfEmpty()
-                        join e in _context.Cargos on a.CargoId equals e.Id
-                        join f in _context.CargoTerritorials on e.Id equals f.CargoId
-                        join g in _context.Cargos on f.CargoSupervisorId equals g.Id into h
-                        from i in h.DefaultIfEmpty()
+                        join e in _context.Estructuras on a.EstructuraId equals e.Id
+                        join i in _context.Cargos on a.CargoId equals i.Id
+                        join lo in _context.Localidads on a.LocalidadId equals lo.Id
                         join j in _context.Categorias on a.CategoriaId equals j.Id into k
                         from l in k.DefaultIfEmpty()
                         join m in _context.Municipios on a.MunicipioId equals m.Id into n
                         from o in n.DefaultIfEmpty()
                         join p in _context.Provincia on o.ProvinciaId equals p.Id into q
                         from r in q.DefaultIfEmpty()
+                        join s in _context.Nacionalidads on a.NacionalidadId equals s.Id
+                        join oc in _context.Ocupacions on a.OcupacionId equals oc.Id
+                        join co in _context.Colegios on a.ColegioId equals co.Id
+                        join rc in _context.Recintos on co.RecintoId equals rc.Id
+                        join cc in _context.Circunscripcions on rc.CircunscripcionId equals cc.Id into ccp
+                        from cp in ccp.DefaultIfEmpty()
                         select new Miembro
                         {
                             Id = a.Id,
@@ -58,26 +64,74 @@ namespace PDE.DataAccess.Repositories
                             EstadoCivilId = a.EstadoCivilId,
                             SupervisorId = a.SupervisorId,
                             CategoriaId = a.CategoriaId,
-                            MunicipioId = a.MunicipioId,
-                            Municipio = new Municipio
-                            {
-                                Descripcion = o.Descripcion,
-                                ProvinciaId = o.Id,
-                                Provincia = new Provincia
-                                {
-                                    Descripcion = r.Descripcion
-                                }
-                            },
+                            MunicipioId = a.MunicipioId,     
+                            LocalidadId = a.LocalidadId,
                             Supervisor = new Miembro
                             {
                                 Nombres = d.Nombres,
                                 Apellidos = d.Apellidos
                             },
+                            EstructuraId = a.EstructuraId,
+                            Estructura = new Estructura
+                            {
+                                Descripcion = e.Descripcion
+                            },
                             Cargo = new Cargo
                             {
-                                Id = e.Id,
-                                Descripcion = e.Descripcion
+                                Id = a.CargoId,
+                                Descripcion = i.Descripcion
+                            },
+
+                            Localidad = new Localidad
+                            {
+                                Id = lo.Id,
+                                Nombre = lo.Nombre
+                            },
+
+                            Municipio = new Municipio
+                            {
+                                Id = o.Id,
+                                Descripcion = o.Descripcion,
+                                ProvinciaId = r.Id,
+                                Provincia = new Provincia
+                                {
+                                    Id = r.Id,
+                                    Descripcion = r.Descripcion
+                                }
+                            },
+                            Nacionalidad = new Nacionalidad
+                            {
+                                Id = s.Id,
+                                Descripcion = s.Descripcion
+                            },
+                            Categoria = new Categoria
+                            {
+                                Id = l.Id,
+                                Descripcion = l.Descripcion
+                            },
+                            Ocupacion = new Ocupacion
+                            {
+                                Id = oc.Id,
+                                Descripcion = oc.Descripcion
+                            },
+                            Colegio = new Colegio
+                            {
+                                Id = co.Id,
+                                Descripcion = co.Descripcion,
+                                RecintoId = co.RecintoId,
+                                Recinto = new Recinto
+                                {
+                                    Id = rc.Id,
+                                    Descripcion = rc.Descripcion,
+                                    CodigoRecinto = rc.CodigoRecinto,
+                                    Circunscripcion = new Circunscripcion
+                                    {
+                                        Id = cp.Id,
+                                        Descripcion = cp.Descripcion
+                                    }
+                                }
                             }
+
                         });
 
             return data;
@@ -99,13 +153,22 @@ namespace PDE.DataAccess.Repositories
             return data;
         }
 
-        public async Task<IEnumerable<Miembro>> GetSupervisorByCargo(int cargoId)
+        public async Task<IEnumerable<Miembro>> GetSupervisorByCargo(int CargoId, int LocalidadId)
         {
-            var cargoTerritorial = _context.CargoTerritorials.FirstOrDefault(a => a.CargoId == cargoId);
-            var miembros = GetMiembros();
-            var data = await miembros.Where(a => a.CargoId == cargoTerritorial.CargoSupervisorId).ToListAsync();
 
-            return data;
+            var miembros = await (from a in GetMiembros()
+                                  join b in _context.CargoTerritorials on a.CargoId equals b.CargoSupervisorId into c
+                                  from d in c.DefaultIfEmpty()
+                                  where d.CargoId == CargoId && d.LocalidadId == LocalidadId
+                                  select new Miembro
+                                  {
+                                      Id = a.Id,
+                                      Nombres = a.Nombres,
+                                      Apellidos = a.Apellidos
+
+                                  }).ToArrayAsync();
+
+            return miembros;
         }
 
         public bool MiembroExists(string cedula)

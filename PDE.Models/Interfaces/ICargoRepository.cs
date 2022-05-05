@@ -9,6 +9,6 @@ namespace PDE.Models.Interfaces
 {
     public interface ICargoRepository : IGenericRepository<Cargo>
     {
-        
+        Task<IEnumerable<Cargo>> GetCargosByEstructura(int estructuraId);
     }
 }

@@ -38,7 +38,12 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-
+                    <div class="form-group">
+                        <label asp-for="EstructuraId" class="control-label">Estructura</label>
+                        <select asp-for="EstructuraId" asp-items="@ViewBag.EstructuraId" class="form-control">
+                            <option>--Seleccione la estructura--</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             <br />

@@ -59,6 +59,7 @@
                 </div>
                 <div class="col-md-6 form-group">
                     <label asp-for="CategoriaId" class="control-label">Categoria</label>
+                    <input asp-for="CategoriaId" type="hidden" class="form-control" />
                     <input value="@Model.Categoria.Descripcion" class="form-control" readonly="readonly" />
                 </div>
             </div>
@@ -66,6 +67,7 @@
                  <div class="col-md-6 form-group">
                     <label asp-for="MunicipioId" class="control-label">Municipio</label>
                     <input asp-for="MunicipioId" type="hidden" class="form-control" />
+                    <input id="ProvinciaId" value="@Model.Municipio.ProvinciaId" type="hidden" class="form-control" />
                     <input value="@Model.Municipio.Descripcion" class="form-control" readonly="readonly" />
                 </div>
                 <div class="col-md-6 form-group">
@@ -91,13 +93,15 @@
                     <span asp-validation-for="Celular" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 form-group">
-                    <label  class="control-label">Localidad</label>
-                    @Html.DropDownList("LocalidadId", ViewBag.Localidad as SelectList,"",new { @class="form-control" })
+                    <label asp-for="LocalidadId" class="control-label">Localidad</label>
+                    <select asp-for="LocalidadId" asp-items="@ViewBag.Localidad" class="form-control">
+                        <option >--Seleccione una localidad--</option>
+                    </select>
                 </div>
             </div>
             <div class="row">
                  <div class="col-md-6 form-group">
-                    <label asp-for="CargoId" class="control-label">Cargo Territorial</label>
+                    <label asp-for="CargoId" class="control-label">Cargo Territorial</label>                    
                     <select asp-for="CargoId" class="form-control"></select>
                     <span asp-validation-for="CargoId" class="text-danger"></span>
                 </div>

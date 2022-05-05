@@ -8,7 +8,7 @@ namespace PDE.Models.Enums
 {
     public enum Sexo
     {
-        F = 1,
-        M = 2
+        F = 2,
+        M = 3
     }
 }

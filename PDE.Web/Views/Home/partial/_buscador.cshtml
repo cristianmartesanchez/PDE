@@ -1,0 +1,61 @@
+﻿
+<div class="card">
+  <div class="card-header">
+    Buscar
+  </div>
+  <div class="card-body">
+
+      <form id="formularioBuscar">
+        <div class="row mb-3">          
+          <div class="col-sm-12">
+              <label for="cedula" class="col-sm-6 col-form-label">Cedula</label>
+            <input type="text" class="form-control" id="cedula">
+          </div>
+        </div>
+
+        <fieldset class="row mb-3">          
+          <div class="col-sm-12">
+              <legend class="col-form-label col-sm-6 pt-0">Estructura</legend>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="rdEstructura" id="gridRadios1" value="1">
+              <label class="form-check-label" for="gridRadios1">
+                Pleno
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="rdEstructura" id="gridRadios2" value="2">
+              <label class="form-check-label" for="gridRadios2">
+                País
+              </label>
+            </div>
+            <div class="form-check disabled">
+              <input class="form-check-input" type="radio" name="rdEstructura" id="gridRadios3" value="3">
+              <label class="form-check-label" for="gridRadios3">
+                Exterior
+              </label>
+            </div>
+          </div>
+        </fieldset>
+        <div class="row mb-3">
+          <div class="col-sm-12">
+              <label for="CargoId" class="col-sm-6 col-form-label">Cargos</label>
+              <select id="CargoId" class="form-select" aria-label="Default select example">
+              </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-sm-12">
+              <label for="ProvinciaId" class="col-sm-6 col-form-label">Provincia</label>
+              <select asp-items="@ViewBag.Provincias" id="ProvinciaId" class="form-select" aria-label="Default select example">
+                  <option>--Selecione una provincia--</option>
+              </select>
+          </div>
+        </div>
+        <button type="button" id="btnBuscar" class="btn btn-primary float-sm-end">Buscar</button>
+      </form>
+
+  </div>
+</div>
+
+
+

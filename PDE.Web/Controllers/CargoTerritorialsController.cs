@@ -28,17 +28,18 @@ namespace PDE.Web.Controllers
             return View(data);
         }
 
-        async Task DropDown()
+        public async Task DropDown(int cargoId = 0, int localidadId = 0, int supervisorId = 0, int estructuraId = 0)
         {
-            ViewBag.CargoId = new SelectList(await _unitWork.Cargo.GetAll(), "Id", "Descripcion");
-            ViewBag.LocalidadId = new SelectList(await _unitWork.Localidad.GetAll(), "Id", "Nombre");
-            ViewBag.SupervisorId = new SelectList(await _unitWork.Cargo.GetAll(), "Id", "Descripcion");
+            ViewBag.CargoId = new SelectList(await _unitWork.Cargo.GetAll(), "Id", "Descripcion",cargoId);
+            ViewBag.LocalidadId = new SelectList(await _unitWork.Localidad.GetAll(), "Id", "Nombre", localidadId);
+            ViewBag.SupervisorId = new SelectList(await _unitWork.Cargo.GetAll(), "Id", "Descripcion", supervisorId);
+            ViewBag.EstructuraId = new SelectList(await _unitWork.Estructura.GetAll(),"Id","Descripcion", estructuraId);
         }
 
         // GET: CargoTerritorials/Create
         public async Task<IActionResult> Create()
         {
-            DropDown();
+            await DropDown();
             return View();
         }
 
@@ -49,12 +50,12 @@ namespace PDE.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _unitWork.CargosTerritoriales.Add(cargoTerritorial);
+                await _unitWork.CargosTerritoriales.Add(cargoTerritorial);
                 await _unitWork.Save();
                 return RedirectToAction(nameof(Index));
             }
 
-            DropDown();
+            await DropDown();
             return View(cargoTerritorial);
         }
 
@@ -71,9 +72,7 @@ namespace PDE.Web.Controllers
             {
                 return NotFound();
             }
-            ViewBag.CargoId = new SelectList(await _unitWork.Cargo.GetAll(), "Id", "Descripcion");
-            ViewBag.LocalidadId = new SelectList(await _unitWork.Localidad.GetAll(), "Id", "Nombre");
-            ViewBag.SupervisorId = new SelectList(await _unitWork.Cargo.GetAll(), "Id", "Descripcion");
+            await DropDown(cargoTerritorial.CargoId, cargoTerritorial.LocalidadId, cargoTerritorial.CargoSupervisorId.Value, cargoTerritorial.EstructuraId);
             return View(cargoTerritorial);
         }
 
@@ -106,9 +105,7 @@ namespace PDE.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.CargoId = new SelectList(await _unitWork.Cargo.GetAll(), "Id", "Descripcion");
-            ViewBag.LocalidadId = new SelectList(await _unitWork.Localidad.GetAll(), "Id", "Nombre");
-            ViewBag.SupervisorId = new SelectList(await _unitWork.Cargo.GetAll(), "Id", "Descripcion");
+            await DropDown(cargoTerritorial.CargoId, cargoTerritorial.LocalidadId, cargoTerritorial.CargoSupervisorId.Value, cargoTerritorial.EstructuraId);
             return View(cargoTerritorial);
         }
 

@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDE.Web", "PDE.Web\PDE.Web.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDE.DataAccess", "PDE.DataAccess\PDE.DataAccess.csproj", "{509D8AFB-146F-4423-9659-F3839A2AA4F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDE.Persistence", "PDE.Persistence\PDE.Persistence.csproj", "{41D70A27-8EBB-4A78-8CD2-DAF985981CDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDE.Persistence", "PDE.Persistence\PDE.Persistence.csproj", "{41D70A27-8EBB-4A78-8CD2-DAF985981CDF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

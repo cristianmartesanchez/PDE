@@ -19,7 +19,7 @@
         
     </div>
     <div class="card-body">
-        <table id="datatablesSimple">
+        <table id="dataTable">
             <thead>
         <tr>
             <th>
@@ -31,6 +31,8 @@
             <th>
                 Supervisor
             </th>
+            <th>Estructura</th>
+            <th></th>
             <th></th>
         </tr>
             </thead>
@@ -45,6 +47,7 @@
             <th>
                 Supervisor
             </th>
+             <th>Estructura</th>
             <th></th>
             <th></th>
         </tr>
@@ -60,6 +63,9 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.CargoSupervisor.Descripcion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Estructura.Descripcion)
                     </td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-solid fa-pencil"></i></a>

@@ -31,19 +31,19 @@ namespace PDE.Web.Controllers
             return View(data);
         }
 
-        async void DropDown()
+        async void DropDown(int cargoId = 0, int estadoCivilId = 0, int localidadId = 0, int sexoId = 0)
         {
             var str = HttpContext.Session.GetString("Usuario");
             var user = JsonConvert.DeserializeObject<Miembro>(str);
 
             var cargos = _unitOfWork.CargosTerritoriales.GetCargosBySupervisor(user.CargoId);
-            ViewBag.Cargos = new SelectList(cargos, "Id", "Cargo.Descripcion");
+            ViewBag.Cargos = new SelectList(cargos, "Id", "Cargo.Descripcion", cargoId);
 
-            ViewBag.EstadoCivil = new SelectList(await _unitOfWork.EstadoCivil.GetAll(), "Id", "Descripcion");
+            ViewBag.EstadoCivil = new SelectList(await _unitOfWork.EstadoCivil.GetAll(), "Id", "Descripcion", estadoCivilId);
 
-            ViewBag.Localidad = new SelectList(await _unitOfWork.Localidad.GetAll(),"Id","Nombre");
+            ViewBag.Localidad = new SelectList(await _unitOfWork.Localidad.GetAll(),"Id","Nombre", localidadId);
 
-            ViewBag.Sexo = new SelectList(await _unitOfWork.Sexo.GetAll(), "Id", "Descripcion");
+            ViewBag.Sexo = new SelectList(await _unitOfWork.Sexo.GetAll(), "Id", "Descripcion", sexoId);
 
         }
 
@@ -55,9 +55,9 @@ namespace PDE.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetSupervisorByCargo(int cargoId)
+        public async Task<JsonResult> GetSupervisorByCargo(int CargoId, int LocalidadId)
         {
-            var data = await _unitOfWork.Miembros.GetSupervisorByCargo(cargoId);
+            var data = await _unitOfWork.Miembros.GetSupervisorByCargo(CargoId,LocalidadId);
             return Json(data);
         }
 
@@ -101,13 +101,16 @@ namespace PDE.Web.Controllers
             
             if (ModelState.IsValid)
             {
+                var estructura = _unitOfWork.CargosTerritoriales.GetCargoTerritoriales()
+                    .FirstOrDefault(a => a.CargoId == miembro.CargoId && a.LocalidadId == miembro.LocalidadId);
 
-                if(! _unitOfWork.Miembros.MiembroExists(miembro.Cedula))
+                if (! _unitOfWork.Miembros.MiembroExists(miembro.Cedula))
                 {
                     var str = HttpContext.Session.GetString("Usuario");
                     var user = JsonConvert.DeserializeObject<Miembro>(str);
-                 
-                    _unitOfWork.Miembros.Add(miembro);
+
+                    miembro.EstructuraId = estructura.EstructuraId;
+                    await _unitOfWork.Miembros.Add(miembro);
                     await _unitOfWork.Save();
                     return RedirectToAction(nameof(Index));
                 }
@@ -125,17 +128,13 @@ namespace PDE.Web.Controllers
                 return NotFound();
             }
 
-            var miembro = await  _unitOfWork.Miembros.GetById(id.Value);
+            var miembro = await  _unitOfWork.Miembros.GetMiembros().FirstOrDefaultAsync(a => a.Id == id.Value);
             if (miembro == null)
             {
                 return NotFound();
             }
 
-
-            ViewData["Cargos"] = new SelectList(await _unitOfWork.Cargo.GetAll(), "Id", "Descripcion",miembro.CargoId);
-            ViewData["EstadoCivil"] = new SelectList(await _unitOfWork.EstadoCivil.GetAll(), "Id", "Descripcion", miembro.EstadoCivilId);
-            ViewData["Sexo"] = new SelectList(await _unitOfWork.Sexo.GetAll(), "Id", "Descripcion", miembro.SexoId);
-
+            DropDown(miembro.CargoId, miembro.EstadoCivilId.Value,0 ,miembro.SexoId.Value);
             return View(miembro);
         }
 
@@ -173,9 +172,7 @@ namespace PDE.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Cargos"] = new SelectList(await _unitOfWork.Cargo.GetAll(), "Id", "Descripcion", miembro.CargoId);
-            ViewData["EstadoCivil"] = new SelectList(await _unitOfWork.EstadoCivil.GetAll(), "Id", "Descripcion", miembro.EstadoCivilId);
-            ViewData["Sexo"] = new SelectList(await _unitOfWork.Sexo.GetAll(), "Id", "Descripcion", miembro.SexoId);
+            DropDown(miembro.CargoId, miembro.EstadoCivilId.Value, 0, miembro.SexoId.Value);
             return View(miembro);
         }
 

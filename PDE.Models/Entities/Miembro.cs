@@ -18,7 +18,6 @@ namespace PDE.Models.Entities
         public string LugarNacimiento { get; set; }
         public string Celular { get; set; }
         public int? SupervisorId { get; set; }
-        public int CargoId { get; set; }
         public int? CategoriaId { get; set; }
         public int? SexoId { get; set; }
         public int? EstadoCivilId { get; set; }
@@ -26,8 +25,12 @@ namespace PDE.Models.Entities
         public int? NacionalidadId { get; set; }
         public int? MunicipioId { get; set; }
         public int? ColegioId { get; set; }
+        public int LocalidadId { get; set; }
+        public int CargoId { get; set; }
+        public int EstructuraId { get; set; }   
 
         public virtual Cargo Cargo { get; set; } = null!;
+        public virtual Estructura Estructura { get; set; } = null!;
         public virtual Categoria Categoria { get; set; } = null!;
         public virtual Colegio Colegio { get; set; } = null!;
         public virtual EstadoCivil EstadoCivil { get; set; } = null!;
@@ -36,6 +39,7 @@ namespace PDE.Models.Entities
         public virtual Ocupacion Ocupacion { get; set; } = null!;
         public virtual Sexo Sexo { get; set; } = null!;
         public virtual Miembro Supervisor { get; set; } = null!;
+        public virtual Localidad Localidad { get; set; } = null!;
         public virtual ICollection<Miembro> InverseSupervisor { get; set; } = null!;
     }
 }

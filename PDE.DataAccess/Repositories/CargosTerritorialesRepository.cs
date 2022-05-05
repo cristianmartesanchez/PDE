@@ -25,15 +25,30 @@ namespace PDE.DataAccess.Repositories
                        join c in _context.Cargos on a.CargoSupervisorId equals c.Id into d
                        from e in d.DefaultIfEmpty()
                        join f in _context.Localidads on a.LocalidadId equals f.Id
+                       join g in _context.Estructuras on a.EstructuraId equals g.Id
                        select new CargoTerritorial
                        {
                            Id = a.Id,
                            CargoId = a.CargoId,
                            CargoSupervisorId = a.CargoSupervisorId,
-                           Cargo = b,
+                           EstructuraId = a.EstructuraId,
+                           Cargo = new Cargo
+                           {
+                               Id = b.Id,
+                               Descripcion = b.Descripcion
+                           },
                            CargoSupervisor = e,
                            LocalidadId = a.LocalidadId,
-                           Localidad = f
+                           Localidad = new Localidad
+                           {
+                               Id = f.Id,
+                               Nombre = f.Nombre
+                           },
+                           Estructura = new Estructura
+                           {
+                               Id = g.Id,
+                               Descripcion = g.Descripcion
+                           }
                        };
 
             return data;
@@ -53,7 +68,7 @@ namespace PDE.DataAccess.Repositories
         public IEnumerable<CargoTerritorial> GetCargosByLocalidad(int LocalidadId)
         {
             var cargos = GetCargoTerritoriales().ToList();
-            var data =  cargos.Where(a => a.LocalidadId == LocalidadId);
+            var data =  cargos.Where(a => a.LocalidadId == LocalidadId).DistinctBy(a => a.CargoId).ToList();
 
             return data;
         }

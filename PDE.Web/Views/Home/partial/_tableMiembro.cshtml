@@ -1,0 +1,38 @@
+﻿@model IEnumerable<PDE.Models.Entities.Miembro>
+
+<table  class="table table-bordered" style="border-collapse:collapse;" id="dataTable">
+  <thead>
+      <tr>
+          <th>Nombres</th>
+          <th>Apellidos</th>
+          <th>Cedula</th>
+          <th>Cargo</th>
+      </tr>
+  </thead>
+  <tfoot>
+      <tr>
+          <th>Nombres</th>
+          <th>Apellidos</th>
+          <th>Cedula</th>
+          <th>Cargo</th>
+      </tr>
+  </tfoot>
+  <tbody>
+    @foreach (var item in Model) {
+        <tr data-toggle="collapse" data-target="#demo1" class="accordion-toggle">
+            <td>
+                @item.Nombres
+            </td>
+            <td>
+                @item.Apellidos
+            </td>
+            <td>
+                @item.Cedula
+            </td>
+            <td>
+                @item.Cargo.Descripcion
+            </td>
+        </tr>
+     }
+    </tbody>
+</table>

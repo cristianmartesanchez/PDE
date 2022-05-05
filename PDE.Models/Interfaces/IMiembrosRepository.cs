@@ -14,6 +14,6 @@ namespace PDE.Models.Interfaces
         bool MiembroExists(string cedula);
         IQueryable<Miembro> GetMiembrosBySupervisor(int supervisorId);
         Task<IEnumerable<Miembro>> GetMiembrosByCargo(int cargoId);
-        Task<IEnumerable<Miembro>> GetSupervisorByCargo(int cargoId);
+        Task<IEnumerable<Miembro>> GetSupervisorByCargo(int CargoId, int LocalidadId);
     }
 }

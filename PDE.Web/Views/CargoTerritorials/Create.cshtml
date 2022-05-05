@@ -18,14 +18,17 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="CargoId" class="control-label">Cargo</label>
-                        @Html.DropDownListFor(model => model.CargoId, ViewBag.CargoId as SelectList,"--Seleccione un cargo--",new { @class="form-control"})
+                        <select asp-for="CargoId" asp-items="@ViewBag.CargoId" class="form-control">
+                            <option>--Seleccione un cargo--</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="CargoSupervisorId" class="control-label">Cargo Supervisor</label>
-                         @Html.DropDownListFor(model => model.CargoSupervisorId, ViewBag.SupervisorId as SelectList,"--Seleccione un cargo supervisor--",new { @class="form-control"})
-
+                        <select asp-for="CargoSupervisorId" asp-items="@ViewBag.SupervisorId" class="form-control">
+                            <option>--Seleccione un cargo supervisor--</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -34,11 +37,18 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="LocalidadId" class="control-label">Localidad</label>
-                        @Html.DropDownListFor(model => model.LocalidadId, ViewBag.LocalidadId as SelectList,"--Seleccione un localidad--",new { @class="form-control"})
+                        <select asp-for="LocalidadId" asp-items="@ViewBag.LocalidadId" class="form-control">
+                            <option>--Seleccione la localidad--</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-6">
-
+                    <div class="form-group">
+                        <label asp-for="EstructuraId" class="control-label">Estructura</label>
+                        <select asp-for="EstructuraId" asp-items="@ViewBag.EstructuraId" class="form-control">
+                            <option>--Seleccione la estructura--</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             <br />

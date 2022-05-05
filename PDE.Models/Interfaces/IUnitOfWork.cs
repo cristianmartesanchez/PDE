@@ -22,6 +22,7 @@ namespace PDE.Models.Interfaces
         ICargoRepository Cargo { get; set; }
         ILocalidadRepository Localidad { get; set; }
         IProvinciaRepository Provincia { get; set; }
+        IEstructuraRepository Estructura { get; set; }
         Task Save();
     }
 }
