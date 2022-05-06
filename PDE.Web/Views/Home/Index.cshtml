@@ -6,12 +6,12 @@
 <div class="row">
     <div class="col-md-9">
     <div class="row">
-        <div class="col-xl-3 col-md-6">
-            <div class="card bg-primary text-white mb-4">
-                <div class="card-body">Primary Card</div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">View Details</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-success" style="background-color:#25a04d">
+                <div class="card-body text-md-center">
+                    <h5 class="card-title text-white">@(ViewBag.Totales.PorcientoPleno) %</h5>
+                    <div class="card-text text-white">@(ViewBag.Totales.TotalPleno) de 10,000</div>
+                    <p class="card-text text-white">Miembros en el Pleno</p>
                 </div>
             </div>
         </div>
@@ -43,32 +43,10 @@
             </div>
         </div>
      </div>
-
-     <div class="row">
-        <div class="col-xl-6">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-chart-area me-1"></i>
-                    Area Chart Example
-                </div>
-                <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
-            </div>
-        </div>
-        <div class="col-xl-6">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-chart-bar me-1"></i>
-                    Bar Chart Example
-                </div>
-                <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
-            </div>
-        </div>
-    </div>
-
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
+            <div class="card mb-4">
+                <div class="card-header text-white" style="background-color:#25a04d">
                     Miembros
                 </div>
                 <div class="card-body navbar-nav-scroll" id="tbMiembroContaine">
@@ -78,9 +56,12 @@
     </div>
 
     </div>
+
     <div class="col-md-3">
         <div class="row">
-            @await Html.PartialAsync("~/Views/Home/partial/_buscador.cshtml")
+            <div class="col-md-12">
+                 @await Html.PartialAsync("~/Views/Home/partial/_buscador.cshtml")
+            </div>
         </div>
     </div>
 </div>

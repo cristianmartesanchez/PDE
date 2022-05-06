@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using PDE.DataAccess;
+using PDE.DataAccess.Service;
 using PDE.Models.Entities;
 using PDE.Models.Interfaces;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -37,13 +39,13 @@ namespace PDE.Web.Controllers
             var user = JsonConvert.DeserializeObject<Miembro>(str);
 
             var cargos = _unitOfWork.CargosTerritoriales.GetCargosBySupervisor(user.CargoId);
-            ViewBag.Cargos = new SelectList(cargos, "Id", "Cargo.Descripcion", cargoId);
+            ViewBag.Cargos = new SelectList(cargos, "CargoId", "Cargo.Descripcion", cargoId);
 
-            ViewBag.EstadoCivil = new SelectList(await _unitOfWork.EstadoCivil.GetAll(), "Id", "Descripcion", estadoCivilId);
+            //ViewBag.EstadoCivil = new SelectList(await _unitOfWork.EstadoCivil.GetAll(), "Id", "Descripcion", estadoCivilId);
+            var localidad = await _unitOfWork.Localidad.GetAll();
+            ViewBag.Localidad = new SelectList(localidad, "Id","Nombre", localidadId);
 
-            ViewBag.Localidad = new SelectList(await _unitOfWork.Localidad.GetAll(),"Id","Nombre", localidadId);
-
-            ViewBag.Sexo = new SelectList(await _unitOfWork.Sexo.GetAll(), "Id", "Descripcion", sexoId);
+            //ViewBag.Sexo = new SelectList(await _unitOfWork.Sexo.GetAll(), "Id", "Descripcion", sexoId);
 
         }
 
@@ -132,9 +134,9 @@ namespace PDE.Web.Controllers
             if (miembro == null)
             {
                 return NotFound();
-            }
+            }            
 
-            DropDown(miembro.CargoId, miembro.EstadoCivilId.Value,0 ,miembro.SexoId.Value);
+            DropDown(miembro.CargoId, miembro.EstadoCivilId.Value,miembro.LocalidadId ,miembro.SexoId.Value);
             return View(miembro);
         }
 
@@ -155,7 +157,10 @@ namespace PDE.Web.Controllers
                     var str = HttpContext.Session.GetString("Usuario");
                     var user = JsonConvert.DeserializeObject<Miembro>(str);
 
-                    miembro.SupervisorId = user.Id;
+                    var estructura = _unitOfWork.CargosTerritoriales.GetCargoTerritoriales()
+                    .FirstOrDefault(a => a.CargoId == miembro.CargoId && a.LocalidadId == miembro.LocalidadId);
+                    miembro.EstructuraId = estructura.EstructuraId;
+
                     _unitOfWork.Miembros.Update(miembro);
                     await _unitOfWork.Save();
                 }

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using PDE.DataAccess.Service;
 
 namespace PDE.Web.Controllers
 {
@@ -16,14 +17,30 @@ namespace PDE.Web.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
 
+
         public HomeController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+
         }
 
         public async Task<IActionResult> Index()
         {
             ViewBag.Provincias = new SelectList(await _unitOfWork.Provincia.GetAll(), "Id", "Descripcion");
+            double pleno = (await _unitOfWork.Miembros.GetAll()).Count(a => a.EstructuraId == 1);
+            double pais = (await _unitOfWork.Miembros.GetAll()).Count(a => a.EstructuraId == 2);
+            double exterior = (await _unitOfWork.Miembros.GetAll()).Count(a => a.EstructuraId == 3);
+
+            ViewBag.Totales = new
+            {
+                TotalPleno = pleno,
+                PorcientoPleno = (pleno * 100) / 10000,
+                TotalPais = pais,
+                PorcientoPais = (pais * 100) / 10000,
+                TotalExterior = exterior,
+                PorcientoExterior = (exterior * 100) / 10000
+            };
+
             return View();
         }
 

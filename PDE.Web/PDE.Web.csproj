@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Controllers\HomeController.cs~RF15a765.TMP" />
     <None Remove="startbootstrap-sb-admin-gh-pages.zip" />
   </ItemGroup>
 

@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using PDE.Models.Entities;
+using PDE.Models.Entities.Identity;
 
 namespace PDE.Persistence
 {
-    public partial class DBPDEContext : DbContext
+    public partial class DBPDEContext : DbContext//IdentityDbContext<IdentityUser>
     {
         public DBPDEContext()
         {
@@ -46,6 +49,8 @@ namespace PDE.Persistence
                 optionsBuilder.UseSqlServer("Server=DESKTOP-35GKIRV;Database=db_PDE01;Trusted_Connection=True;MultipleActiveResultSets=true");
             }
         }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -372,6 +377,7 @@ namespace PDE.Persistence
                     .IsUnicode(false);
             });
 
+            base.OnModelCreating(modelBuilder);
             OnModelCreatingPartial(modelBuilder);
         }
 

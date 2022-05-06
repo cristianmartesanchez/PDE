@@ -35,6 +35,8 @@ namespace PDE.DataAccess.Repositories
                         join e in _context.Estructuras on a.EstructuraId equals e.Id
                         join i in _context.Cargos on a.CargoId equals i.Id
                         join lo in _context.Localidads on a.LocalidadId equals lo.Id
+                        join ec in _context.EstadoCiviles on a.EstadoCivilId equals ec.Id
+                        join sx in _context.Sexos on a.SexoId equals sx.Id
                         join j in _context.Categorias on a.CategoriaId equals j.Id into k
                         from l in k.DefaultIfEmpty()
                         join m in _context.Municipios on a.MunicipioId equals m.Id into n
@@ -114,6 +116,16 @@ namespace PDE.DataAccess.Repositories
                                 Id = oc.Id,
                                 Descripcion = oc.Descripcion
                             },
+                            EstadoCivil = new EstadoCivil
+                            {
+                                Id = ec.Id,
+                                Descripcion= ec.Descripcion
+                            },
+                            Sexo = new Sexo
+                            {
+                                Id = sx.Id,
+                                Descripcion = sx.Descripcion
+                            },
                             Colegio = new Colegio
                             {
                                 Id = co.Id,
@@ -160,13 +172,7 @@ namespace PDE.DataAccess.Repositories
                                   join b in _context.CargoTerritorials on a.CargoId equals b.CargoSupervisorId into c
                                   from d in c.DefaultIfEmpty()
                                   where d.CargoId == CargoId && d.LocalidadId == LocalidadId
-                                  select new Miembro
-                                  {
-                                      Id = a.Id,
-                                      Nombres = a.Nombres,
-                                      Apellidos = a.Apellidos
-
-                                  }).ToArrayAsync();
+                                  select a).ToListAsync();
 
             return miembros;
         }

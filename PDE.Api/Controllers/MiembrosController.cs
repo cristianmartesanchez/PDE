@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using PDE.Models.Interfaces;
 
 namespace PDE.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class MiembrosController : ControllerBase
@@ -28,6 +30,20 @@ namespace PDE.Api.Controllers
         public async Task<IEnumerable<Miembro>> GetMiembros()
         {
             return await _unitOfWork.Miembros.GetAll();
+        }
+
+        [HttpGet("GetMiembrosBySupervisor")]
+        public async Task<IEnumerable<Miembro>> GetMiembros(int supervisorId)
+        {
+            var data = await _unitOfWork.Miembros.GetMiembrosBySupervisor(supervisorId).ToListAsync();
+            return data;
+        }
+
+        [HttpGet("GetSupervisorByCargo")]
+        public async Task<IEnumerable<Miembro>> GetSupervisorByCargo(int CargoId, int LocalidadId)
+        {
+            var data = await _unitOfWork.Miembros.GetSupervisorByCargo(CargoId, LocalidadId);
+            return data;
         }
 
         // GET: api/Miembros/5

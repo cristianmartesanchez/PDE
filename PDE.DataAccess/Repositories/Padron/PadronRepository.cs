@@ -33,6 +33,10 @@ namespace PDE.DataAccess.Repositories.Padron
                               join h in _context.Recintos on g.Idrecinto equals h.Id
                               join i in _context.Circunscripcions on h.Idcircunscripcion equals i.Id into j
                               from k in j.DefaultIfEmpty()
+                              join sx in _context.Sexos on a.IdSexo equals sx.IdSexo into m
+                              from n in m.DefaultIfEmpty()
+                              join ec in _context.EstadoCivils on a.IdEstadoCivil equals ec.Id into o
+                              from p in o.DefaultIfEmpty()
                               where a.Cedula == cedula 
                               select new Miembro
                               {
@@ -48,6 +52,14 @@ namespace PDE.DataAccess.Repositories.Padron
                                   NacionalidadId = a.Idnacionalidad,
                                   OcupacionId = a.IdOcupacion,                                  
                                   SexoId = (int?)Enum.Parse<Enums.Sexo>(a.IdSexo),
+                                  Sexo = new Sexo
+                                  {
+                                      Descripcion = n.Descripcion
+                                  },
+                                  EstadoCivil = new EstadoCivil
+                                  {
+                                      Descripcion = p.Descripcion
+                                  },
                                   Municipio = new Municipio
                                   {
                                       Id = b.Id,

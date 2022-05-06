@@ -30,13 +30,13 @@
              <div class="row">
                <div class="col-md-6 form-group">
                     <label asp-for="SexoId" class="control-label">Sexo</label>
-                    @Html.DropDownListFor(model => model.SexoId, ViewBag.Sexo as SelectList,"",new { @class="form-control", @disabled ="true"})
                     <input asp-for="SexoId" type="hidden" class="form-control" />
+                    <input value="@Model.Sexo.Descripcion" class="form-control" readonly="readonly" />
                 </div>
                <div class="col-md-6 form-group">
                     <label asp-for="EstadoCivilId" class="control-label">Estado Civil</label>
-                    @Html.DropDownListFor(model => model.EstadoCivilId, ViewBag.EstadoCivil as SelectList,"",new { @class="form-control", @disabled="true" })
                     <input asp-for="EstadoCivilId" type="hidden" class="form-control" />
+                    <input value="@Model.EstadoCivil.Descripcion" class="form-control" readonly="readonly" />
                 </div>
             </div>
             <div class="row">
@@ -113,10 +113,9 @@
             </div>
             <hr />
             <div class="row">
-                <div class="col-md-3 form-group">
-                    <input type="submit" value="Agregar" class="btn btn-primary" />
+                <div class="col-md-12 form-group">
+                    <input type="submit" value="Guardar" class="btn btn-primary float-sm-end" />
                 </div>
-                <div class="col-md-9"></div>
             </div>
 
         </form>

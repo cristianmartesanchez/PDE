@@ -1,7 +1,7 @@
 ﻿@model PDE.Models.Entities.Miembro
 
 @{
-    ViewData["Title"] = "Edit";
+    //ViewData["Title"] = "Miembro";
 }
 
 <h1 class="mt-4"></h1>
@@ -14,6 +14,7 @@
        <form asp-action="Edit">            
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="CategoriaId" />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="row">
                 <div class="col-md-6 form-group">
@@ -43,15 +44,13 @@
              <div class="row">
                <div class="col-md-6 form-group">
                     <label asp-for="SexoId" class="control-label">Sexo</label>
-                    @*@Html.DropDownListFor(model => model.SexoId, ViewBag.Sexo as SelectList,"",new { @class="form-control", @disabled ="true"})*@
-                    <select asp-for="SexoId" asp-items="@ViewBag.Sexo" disabled ="true" class="form-control"></select>
                     <input asp-for="SexoId" type="hidden" class="form-control" />
+                    <input value="@Model.Sexo.Descripcion" class="form-control" readonly="readonly" />
                 </div>
                <div class="col-md-6 form-group">
                     <label asp-for="EstadoCivilId" class="control-label">Estado Civil</label>
-                    <select asp-for="EstadoCivilId" asp-items="@ViewBag.EstadoCivil" disabled ="true" class="form-control"></select>
-                    @*@Html.DropDownListFor(model => model.EstadoCivilId, ViewBag.EstadoCivil as SelectList,"",new { @class="form-control", @disabled="true" })*@
                     <input asp-for="EstadoCivilId" type="hidden" class="form-control" />
+                    <input value="@Model.EstadoCivil.Descripcion" class="form-control" readonly="readonly" />
                 </div>
             </div>
             <div class="row">
@@ -106,37 +105,38 @@
                     <span asp-validation-for="Celular" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 form-group">
-                    <label  class="control-label">Localidad</label>
-                    @Html.DropDownList("LocalidadId", ViewBag.Localidad as SelectList,"",new { @class="form-control" })
+                    <label asp-for="LocalidadId" class="control-label">Localidad</label>
+                    @Html.DropDownListFor(model => model.LocalidadId, ViewBag.Localidad as SelectList,"--Seleccione una localidad--",new { @class="form-control"})
+                    <span asp-validation-for="LocalidadId" class="text-danger"></span>
                 </div>
             </div>
             <div class="row">
-@*                 <div class="col-md-6 form-group">
-                    <label asp-for="CargoId" class="control-label">Cargo Territorial</label>
+                 <div class="col-md-6 form-group">
+                    <label asp-for="CargoId" class="control-label">Cargo Territorial</label>                    
                     <select asp-for="CargoId" asp-items="@ViewBag.Cargos" class="form-control"></select>
                     <span asp-validation-for="CargoId" class="text-danger"></span>
-                </div>*@
+                </div>
                 <div class="col-md-6 form-group">
                     <label asp-for="SupervisorId" class="control-label">Supervisor</label>                    
-                    <select asp-for="SupervisorId" class="form-control"></select>
+                    <select asp-for="SupervisorId" class="form-control">
+                        <option value="@Model.SupervisorId" >@(Model.Supervisor.Nombres+" "+Model.Supervisor.Apellidos)</option>
+                    </select>
                     <span asp-validation-for="SupervisorId" class="text-danger"></span>
                 </div>
             </div>
             <hr />
             <div class="row">
-                <div class="col-md-3 form-group">
-                    <input type="submit" value="Agregar" class="btn btn-primary" />
+                <div class="col-md-12 form-group">
+                    <input type="submit" value="Guardar" class="btn btn-primary float-sm-end" />
                 </div>
-                <div class="col-md-9"></div>
+                @*<div class="col-md-9"></div>*@
             </div>
           </form> 
 </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
+    <script type="text/javascript" src="~/js/Miembros/edit-miembro.js" ></script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
 }
