@@ -3,42 +3,51 @@
 <form asp-action="Create">            
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="row">
-                <div class="col-md-6 form-group">
-                    <label asp-for="Nombres" class="control-label"></label>
-                    <input asp-for="Nombres" readonly="true" class="form-control" />
-                    <span asp-validation-for="Nombres" class="text-danger"></span>
+                <div class="col-md-2">
+                    <div class="row">
+                        <img src="~/assets/img/icon-profile-22.png" class="float-start col-md-12" alt="">
+                    </div>                    
                 </div>
-                <div class="col-md-6 form-group">
-                    <label asp-for="Apellidos" class="control-label"></label>
-                    <input asp-for="Apellidos" readonly="true" class="form-control" />
-                    <span asp-validation-for="Apellidos" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    <label asp-for="FechaNacimiento" class="control-label"></label>
-                    <input asp-for="FechaNacimiento" readonly="true"  class="form-control" />
-                    <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
-                </div>
-                <div class="col-md-6 form-group">
-                    <label asp-for="LugarNacimiento" class="control-label"></label>
-                    <input asp-for="LugarNacimiento" readonly="true" class="form-control" />
-                    <span asp-validation-for="LugarNacimiento" class="text-danger"></span>
+                <div class="col-md-10">
+                    <div class="row ">
+                        <div class="col-md-5 form-group">
+                            <label asp-for="Nombres" class="control-label"></label>
+                            <input asp-for="Nombres" readonly="true" class="form-control" />
+                            <span asp-validation-for="Nombres" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-7 form-group">
+                            <label asp-for="Apellidos" class="control-label"></label>
+                            <input asp-for="Apellidos" readonly="true" class="form-control" />
+                            <span asp-validation-for="Apellidos" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5 form-group">
+                            <label asp-for="FechaNacimiento" class="control-label"></label>
+                            <input asp-for="FechaNacimiento" readonly="true"  class="form-control" />
+                            <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-7 form-group">
+                            <label asp-for="LugarNacimiento" class="control-label"></label>
+                            <input asp-for="LugarNacimiento" readonly="true" class="form-control" />
+                            <span asp-validation-for="LugarNacimiento" class="text-danger"></span>
+                        </div>
+                   </div>
+                   <div class="row">
+                     <div class="col-md-5 form-group">
+                          <label asp-for="SexoId" class="control-label">Sexo</label>
+                          <input asp-for="SexoId" type="hidden" class="form-control" />
+                          <input value="@Model.Sexo.Descripcion" class="form-control" readonly="readonly" />
+                      </div>
+                     <div class="col-md-7 form-group">
+                          <label asp-for="EstadoCivilId" class="control-label">Estado Civil</label>
+                          <input asp-for="EstadoCivilId" type="hidden" class="form-control" />
+                          <input value="@Model.EstadoCivil.Descripcion" class="form-control" readonly="readonly" />
+                       </div>
+                   </div>
                 </div>
             </div>
 
-             <div class="row">
-               <div class="col-md-6 form-group">
-                    <label asp-for="SexoId" class="control-label">Sexo</label>
-                    <input asp-for="SexoId" type="hidden" class="form-control" />
-                    <input value="@Model.Sexo.Descripcion" class="form-control" readonly="readonly" />
-                </div>
-               <div class="col-md-6 form-group">
-                    <label asp-for="EstadoCivilId" class="control-label">Estado Civil</label>
-                    <input asp-for="EstadoCivilId" type="hidden" class="form-control" />
-                    <input value="@Model.EstadoCivil.Descripcion" class="form-control" readonly="readonly" />
-                </div>
-            </div>
             <div class="row">
                 <div class="col-md-6 form-group">
                     <label asp-for="Cedula" class="control-label"></label>
@@ -59,7 +68,6 @@
                 </div>
                 <div class="col-md-6 form-group">
                     <label asp-for="CategoriaId" class="control-label">Categoria</label>
-                    <input asp-for="CategoriaId" type="hidden" class="form-control" />
                     <input value="@Model.Categoria.Descripcion" class="form-control" readonly="readonly" />
                 </div>
             </div>
@@ -94,7 +102,7 @@
                 </div>
                 <div class="col-md-6 form-group">
                     <label asp-for="LocalidadId" class="control-label">Localidad</label>
-                    <select asp-for="LocalidadId" asp-items="@ViewBag.Localidad" class="form-control">
+                    <select asp-for="LocalidadId" asp-items="@ViewBag.Localidades" class="form-control">
                         <option >--Seleccione una localidad--</option>
                     </select>
                 </div>
@@ -106,9 +114,8 @@
                     <span asp-validation-for="CargoId" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 form-group">
-                    <label asp-for="SupervisorId" class="control-label">Supervisor</label>                    
+                    <label asp-for="SupervisorId" class="control-label">Supervisor</label>      
                     <select asp-for="SupervisorId" class="form-control"></select>
-                    <span asp-validation-for="SupervisorId" class="text-danger"></span>
                 </div>
             </div>
             <hr />

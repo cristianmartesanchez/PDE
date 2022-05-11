@@ -108,7 +108,7 @@ namespace PDE.DataAccess.Repositories
                             },
                             Categoria = new Categoria
                             {
-                                Id = l.Id,
+                                
                                 Descripcion = l.Descripcion
                             },
                             Ocupacion = new Ocupacion

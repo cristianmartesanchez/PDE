@@ -9,7 +9,7 @@ using PDE.Models.Entities.Identity;
 
 namespace PDE.Persistence
 {
-    public partial class DBPDEContext : DbContext//IdentityDbContext<IdentityUser>
+    public partial class DBPDEContext : IdentityDbContext<IdentityUser>
     {
         public DBPDEContext()
         {
@@ -40,6 +40,8 @@ namespace PDE.Persistence
         public virtual DbSet<Sexo> Sexos { get; set; } = null!;
         public virtual DbSet<Zona> Zonas { get; set; } = null!;
         public virtual DbSet<Estructura> Estructuras { get; set; } = null!;
+
+        public virtual DbSet<RegisterModel> RegisterModels { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

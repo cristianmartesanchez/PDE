@@ -3,38 +3,48 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PDE.DataAccess;
 using PDE.Models.Entities;
+using PDE.Models.Interfaces;
 using PDE.Persistence;
 
 namespace PDE.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CargosController : ControllerBase
     {
-        private readonly DBPDEContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CargosController(DBPDEContext context)
+        public CargosController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
-
         // GET: api/Cargos
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Cargo>>> GetCargos()
+        public async Task<IEnumerable<Cargo>> GetCargos()
         {
-            return await _context.Cargos.ToListAsync();
+            return await _unitOfWork.Cargo.GetAll();
+        }
+
+
+        [HttpGet("GetCargosByEstructura/{estructuraId}")]
+        public async Task<IEnumerable<Cargo>> GetCargosByEstructura(int estructuraId)
+        {
+            var data = (await _unitOfWork.Cargo.GetCargosByEstructura(estructuraId)).DistinctBy(a => a.Id);
+            return data;
         }
 
         // GET: api/Cargos/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Cargo>> GetCargo(int id)
         {
-            var cargo = await _context.Cargos.FindAsync(id);
+            var cargo = await _unitOfWork.Cargo.GetById(id);
 
             if (cargo == null)
             {
@@ -54,15 +64,15 @@ namespace PDE.Api.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(cargo).State = EntityState.Modified;
+            _unitOfWork.Cargo.Update(cargo);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _unitOfWork.Save();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CargoExists(id))
+                if (!await CargoExists(id))
                 {
                     return NotFound();
                 }
@@ -80,8 +90,8 @@ namespace PDE.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Cargo>> PostCargo(Cargo cargo)
         {
-            _context.Cargos.Add(cargo);
-            await _context.SaveChangesAsync();
+            await _unitOfWork.Cargo.Add(cargo);
+            await _unitOfWork.Save();
 
             return CreatedAtAction("GetCargo", new { id = cargo.Id }, cargo);
         }
@@ -90,21 +100,21 @@ namespace PDE.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCargo(int id)
         {
-            var cargo = await _context.Cargos.FindAsync(id);
+            var cargo = await _unitOfWork.Cargo.GetById(id);
             if (cargo == null)
             {
                 return NotFound();
             }
 
-            _context.Cargos.Remove(cargo);
-            await _context.SaveChangesAsync();
+            _unitOfWork.Cargo.Remove(cargo);
+            await _unitOfWork.Save();
 
             return NoContent();
         }
 
-        private bool CargoExists(int id)
+        private async Task<bool> CargoExists(int id)
         {
-            return _context.Cargos.Any(e => e.Id == id);
+            return (await _unitOfWork.Cargo.GetAll()).Any(e => e.Id == id);
         }
     }
 }

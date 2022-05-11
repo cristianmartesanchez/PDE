@@ -3,38 +3,42 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PDE.DataAccess;
 using PDE.Models.Entities;
+using PDE.Models.Interfaces;
 using PDE.Persistence;
 
 namespace PDE.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class LocalidadController : ControllerBase
     {
-        private readonly DBPDEContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public LocalidadController(DBPDEContext context)
+        public LocalidadController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: api/Localidad
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Localidad>>> GetLocalidads()
+        public async Task<IEnumerable<Localidad>> GetLocalidads()
         {
-            return await _context.Localidads.ToListAsync();
+            var localidades = await _unitOfWork.Localidad.GetAll();
+            return localidades;
         }
 
         // GET: api/Localidad/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Localidad>> GetLocalidad(int id)
         {
-            var localidad = await _context.Localidads.FindAsync(id);
+            var localidad = await _unitOfWork.Localidad.GetById(id);
 
             if (localidad == null)
             {
@@ -45,7 +49,6 @@ namespace PDE.Api.Controllers
         }
 
         // PUT: api/Localidad/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutLocalidad(int id, Localidad localidad)
         {
@@ -54,15 +57,15 @@ namespace PDE.Api.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(localidad).State = EntityState.Modified;
+            _unitOfWork.Localidad.Update(localidad);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _unitOfWork.Save();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!LocalidadExists(id))
+                if (!await LocalidadExists(id))
                 {
                     return NotFound();
                 }
@@ -76,12 +79,11 @@ namespace PDE.Api.Controllers
         }
 
         // POST: api/Localidad
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Localidad>> PostLocalidad(Localidad localidad)
         {
-            _context.Localidads.Add(localidad);
-            await _context.SaveChangesAsync();
+            await _unitOfWork.Localidad.Add(localidad);
+            await _unitOfWork.Save();
 
             return CreatedAtAction("GetLocalidad", new { id = localidad.Id }, localidad);
         }
@@ -90,21 +92,21 @@ namespace PDE.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLocalidad(int id)
         {
-            var localidad = await _context.Localidads.FindAsync(id);
+            var localidad = await _unitOfWork.Localidad.GetById(id);
             if (localidad == null)
             {
                 return NotFound();
             }
 
-            _context.Localidads.Remove(localidad);
-            await _context.SaveChangesAsync();
+            _unitOfWork.Localidad.Remove(localidad);
+            await _unitOfWork.Save();
 
             return NoContent();
         }
 
-        private bool LocalidadExists(int id)
+        private async Task<bool> LocalidadExists(int id)
         {
-            return _context.Localidads.Any(e => e.Id == id);
+            return (await _unitOfWork.Localidad.GetAll()).Any(e => e.Id == id);
         }
     }
 }

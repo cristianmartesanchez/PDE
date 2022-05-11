@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,17 +28,24 @@ namespace PDE.Api.Controllers
         [HttpGet]
         public async Task<IEnumerable<Miembro>> GetMiembros()
         {
-            return await _unitOfWork.Miembros.GetAll();
+            return await _unitOfWork.Miembros.GetMiembros().ToListAsync();
         }
 
-        [HttpGet("GetMiembrosBySupervisor")]
+        [AllowAnonymous]
+        [HttpGet("GetProvincias")]
+        public async Task<IEnumerable<Provincia>> GetProvincias()
+        {
+            return await _unitOfWork.Provincia.GetAll();
+        }
+
+        [HttpGet("GetMiembrosBySupervisor/{supervisorId}")]
         public async Task<IEnumerable<Miembro>> GetMiembros(int supervisorId)
         {
             var data = await _unitOfWork.Miembros.GetMiembrosBySupervisor(supervisorId).ToListAsync();
             return data;
         }
 
-        [HttpGet("GetSupervisorByCargo")]
+        [HttpGet("GetSupervisorByCargo/{CargoId}/{LocalidadId}")]
         public async Task<IEnumerable<Miembro>> GetSupervisorByCargo(int CargoId, int LocalidadId)
         {
             var data = await _unitOfWork.Miembros.GetSupervisorByCargo(CargoId, LocalidadId);
@@ -50,7 +56,21 @@ namespace PDE.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Miembro>> GetMiembro(int id)
         {
-            var miembro = await _unitOfWork.Miembros.GetById(id);
+            var miembro = await _unitOfWork.Miembros.GetMiembros().FirstOrDefaultAsync(a => a.Id == id);
+
+            if (miembro == null)
+            {
+                return NotFound();
+            }
+
+            return miembro;
+        }
+
+        // GET: api/Miembros/5
+        [HttpGet("GetMiembroByCedula/{cedula}")]
+        public async Task<ActionResult<Miembro>> GetMiembro(string cedula)
+        {
+            var miembro = await _unitOfWork.Miembros.GetMiembroByCedula(cedula);
 
             if (miembro == null)
             {

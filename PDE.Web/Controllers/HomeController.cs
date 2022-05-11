@@ -6,30 +6,39 @@ using System.Diagnostics;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using PDE.DataAccess.Service;
+using PDE.Models.Service;
+using System.Linq;
 
 namespace PDE.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
 
+        public string UrlBase = $"api/Miembros/";
+        private IMiembroService _miembroService;
+        private IProvinciaService _provinciaService;
+        private ICargoService _cargoService;
 
-        public HomeController(IUnitOfWork unitOfWork)
+        public HomeController(IMiembroService miembroService, IProvinciaService provinciaService, 
+            ICargoService cargoService)
         {
-            _unitOfWork = unitOfWork;
-
+            _miembroService = miembroService;
+            _provinciaService = provinciaService;
+            _cargoService = cargoService;
         }
 
         public async Task<IActionResult> Index()
         {
-            ViewBag.Provincias = new SelectList(await _unitOfWork.Provincia.GetAll(), "Id", "Descripcion");
-            double pleno = (await _unitOfWork.Miembros.GetAll()).Count(a => a.EstructuraId == 1);
-            double pais = (await _unitOfWork.Miembros.GetAll()).Count(a => a.EstructuraId == 2);
-            double exterior = (await _unitOfWork.Miembros.GetAll()).Count(a => a.EstructuraId == 3);
+            var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
+
+            var miembros = await _miembroService.GetAll(UrlBase, token.Value);
+            var provincias = await _provinciaService.GetAll($"{UrlBase}GetProvincias", token.Value);
+
+            ViewBag.Provincias = new SelectList(provincias, "Id", "Descripcion");
+            double pleno = miembros.Count(a => a.EstructuraId == 1);
+            double pais = miembros.Count(a => a.EstructuraId == 2);
+            double exterior = miembros.Count(a => a.EstructuraId == 3);
 
             ViewBag.Totales = new
             {
@@ -44,34 +53,21 @@ namespace PDE.Web.Controllers
             return View();
         }
 
-        [HttpGet]
-        public IActionResult Login()
+
+        private async Task<bool> MiembroExists(string username)
         {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Login(Usuario usuario)
-        {
-            
-            if(await MiembroExists(usuario.Cedula))
-            {
-                var user = await _unitOfWork.Miembros.GetMiembroByCedula(usuario.Cedula);
-                var str = JsonConvert.SerializeObject(user);
-                HttpContext.Session.SetString("Usuario", str);
-
-                return RedirectToAction("Index");
-            }
-
-            return View(usuario);
+            var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
+            string url = UrlBase + $"GetMiembroByCedula/{username}";
+            return (await _miembroService.Get(url, token.Value)) != null;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetMiembros(string cedula = "", int estructuraId = 0, int cargoId = 0, int provinciaId = 0)
         {
-            var data = _unitOfWork.Miembros.GetMiembros();
+            var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
+            var data = await _miembroService.GetAll(UrlBase, token.Value);
 
-            if(!string.IsNullOrEmpty(cedula))
+            if (!string.IsNullOrEmpty(cedula))
             {
                 data = data.Where(a => a.Cedula == cedula);
             }
@@ -89,25 +85,16 @@ namespace PDE.Web.Controllers
                 data = data.Where(a => a.Municipio.ProvinciaId == provinciaId);
             }
 
-            return PartialView("partial/_tableMiembro", await data.ToListAsync());
+            return PartialView("partial/_tableMiembro", data);
         }
 
         [HttpGet]
         public async Task<JsonResult> GetCargosByEstructura(int estructuraId)
         {
-            var data = (await _unitOfWork.Cargo.GetCargosByEstructura(estructuraId)).DistinctBy(a => a.Id);
-            return Json(data);
+            var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
+            var data = await _cargoService.GetAll($"api/Cargos/GetCargosByEstructura/{estructuraId}",token.Value);
+            return Json(data.DistinctBy(a => a.Id));
         }
 
-        private async Task<bool> MiembroExists(string cedula)
-        {
-            return (await _unitOfWork.Miembros.GetAll()).Any(e => e.Cedula == cedula);
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }

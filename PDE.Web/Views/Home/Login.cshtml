@@ -1,4 +1,4 @@
-﻿@model PDE.Models.Entities.Usuario
+﻿@model PDE.Models.Entities.Identity.LoginModel
 
 @{
     Layout = null;
@@ -28,14 +28,14 @@
                                     <div class="card-body">
                                         <form asp-action="Login">
                                             <div class="form-floating mb-3">                                               
-                                                <input asp-for="Cedula" autocomplete="off" class="form-control" />
-                                                <label asp-for="Cedula" class="control-label"></label>
+                                                <input asp-for="Username" autocomplete="off" class="form-control" />
+                                                <label asp-for="Username" class="control-label"></label>
                                             </div>
-@*                                            <div class="form-floating mb-3">
-                                                <input asp-for="Contrasena" type="password" class="form-control" />
-                                                <label asp-for="Contrasena" class="control-label">Contrasena</label>
+                                            <div class="form-floating mb-3">
+                                                <input asp-for="Password" type="password" class="form-control" />
+                                                <label asp-for="Password" class="control-label">Contrasena</label>
                                             </div>
-                                            <div class="form-check mb-3">
+ @*                                           <div class="form-check mb-3">
                                                 <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
                                                 <label class="form-check-label" for="inputRememberPassword">Remember Password</label>
                                             </div>*@

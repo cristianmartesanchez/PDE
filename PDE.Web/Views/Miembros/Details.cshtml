@@ -1,66 +1,133 @@
 ﻿@model PDE.Models.Entities.Miembro
 
-@{
-    ViewData["Title"] = "Details";
+<h1 class="mt-4"></h1>
+<div class="card">
+    <div class="card-header text-white" style="background-color:#25a04d">
+       <i class="fas fa-table me-1"></i>
+         Miembro
+    </div>
+   <div class="card-body">
+       <form asp-action="">            
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="row">
+                        <img src="~/assets/img/icon-profile-22.png" class="float-start col-md-12" alt="">
+                    </div>                    
+                </div>
+                <div class="col-md-10">
+                    <div class="row ">
+                        <div class="col-md-5 form-group">
+                            <label asp-for="Nombres" class="control-label"></label>
+                            <input asp-for="Nombres" readonly="true" class="form-control" />
+                            <span asp-validation-for="Nombres" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-7 form-group">
+                            <label asp-for="Apellidos" class="control-label"></label>
+                            <input asp-for="Apellidos" readonly="true" class="form-control" />
+                            <span asp-validation-for="Apellidos" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5 form-group">
+                            <label asp-for="FechaNacimiento" class="control-label"></label>
+                            <input asp-for="FechaNacimiento" readonly="true"  class="form-control" />
+                            <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-7 form-group">
+                            <label asp-for="LugarNacimiento" class="control-label"></label>
+                            <input asp-for="LugarNacimiento" readonly="true" class="form-control" />
+                            <span asp-validation-for="LugarNacimiento" class="text-danger"></span>
+                        </div>
+                   </div>
+                   <div class="row">
+                     <div class="col-md-5 form-group">
+                          <label asp-for="SexoId" class="control-label">Sexo</label>
+                          <input asp-for="SexoId" type="hidden" class="form-control" />
+                          <input value="@Model.Sexo.Descripcion" class="form-control" readonly="readonly" />
+                      </div>
+                     <div class="col-md-7 form-group">
+                          <label asp-for="EstadoCivilId" class="control-label">Estado Civil</label>
+                          <input asp-for="EstadoCivilId" type="hidden" class="form-control" />
+                          <input value="@Model.EstadoCivil.Descripcion" class="form-control" readonly="readonly" />
+                       </div>
+                   </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label asp-for="Cedula" class="control-label"></label>
+                    <input asp-for="Cedula" readonly="true"  class="form-control" />
+                    <span asp-validation-for="Cedula" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label asp-for="NacionalidadId" class="control-label">Nacionalidad</label>
+                    <input asp-for="NacionalidadId" type="hidden" class="form-control" />
+                    <input value="@Model.Nacionalidad.Descripcion" class="form-control" readonly="readonly" />
+                </div>
+            </div>
+              <div class="row">
+                <div class="col-md-6 form-group">
+                    <label asp-for="OcupacionId" class="control-label">Ocupación</label>
+                    <input value="@Model.Ocupacion.Descripcion" readonly="readonly"  class="form-control" />
+                    <input asp-for="OcupacionId" type="hidden" class="form-control" />
+                </div>
+                <div class="col-md-6 form-group">
+                    <label asp-for="CategoriaId" class="control-label">Categoria</label>
+                    <input value="@Model.Categoria.Descripcion" class="form-control" readonly="readonly" />
+                </div>
+            </div>
+            <div class="row">
+                 <div class="col-md-6 form-group">
+                    <label asp-for="MunicipioId" class="control-label">Municipio</label>
+                    <input asp-for="MunicipioId" type="hidden" class="form-control" />
+                    <input value="@Model.Municipio.Descripcion" class="form-control" readonly="readonly" />
+                </div>
+                <div class="col-md-6 form-group">
+                    <label  class="control-label">Provincia</label>
+                    <input value="@Model.Municipio.Provincia.Descripcion" class="form-control" readonly="readonly" />                    
+                </div>
+            </div>
+             <div class="row">
+                 <div class="col-md-6 form-group">
+                    <label asp-for="ColegioId" class="control-label">Colegio</label>
+                    <input asp-for="ColegioId" type="hidden" class="form-control" />
+                    <input value="@Model.Colegio.Descripcion" class="form-control" readonly="readonly" />
+                </div>
+                <div class="col-md-6 form-group">
+                    <label  class="control-label">Recinto</label>
+                    <input value="@Model.Colegio.Recinto.CodigoRecinto" class="form-control" readonly="readonly" />                    
+                </div>
+            </div>
+            <div class="row">
+                 <div class="col-md-6 form-group">
+                    <label asp-for="Celular" class="control-label"></label>
+                    <input asp-for="Celular" class="form-control" autocomplete="off" readonly="readonly" />
+                </div>
+                <div class="col-md-6 form-group">
+                    <label asp-for="LocalidadId" class="control-label">Localidad</label>
+                    <input value="@Model.Localidad.Nombre" class="form-control" readonly="readonly" />
+                </div>
+            </div>
+            <div class="row">
+                 <div class="col-md-6 form-group">
+                    <label asp-for="CargoId" class="control-label">Cargo Territorial</label>                    
+                    <input value="@Model.Cargo.Descripcion" class="form-control" readonly="readonly" />
+                </div>
+                <div class="col-md-6 form-group">
+                    <label asp-for="SupervisorId" class="control-label">Supervisor</label>                    
+                    <input value="@(Model.Supervisor.Nombres+" "+Model.Supervisor.Apellidos)" class="form-control" readonly="readonly" />
+                </div>
+            </div>
+          </form> 
+</div>
+</div>
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
 }
 
-<h1>Details</h1>
-
-<div>
-    <h4>Miembro</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nombres)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nombres)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Apellidos)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Apellidos)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Cedula)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cedula)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaNacimiento)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaNacimiento)
-        </dd>
-        <dt class = "col-sm-2">
-     @*       @Html.DisplayNameFor(model => model.Sexo)*@
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Sexo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Celular)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Celular)
-        </dd>
-@*        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CargoId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CargoId)
-        </dd>*@
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Supervisor)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Supervisor.Apellidos)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>

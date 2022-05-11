@@ -1,6 +1,6 @@
 ﻿$(function () {
 
-    $("#SupervisorId").append('<option >--Seleccione un cargo territorial--</option>');
+    $("#SupervisorId").append('<option value="0" >--Seleccione un supervisor--</option>');
     $("#CargoId").append('<option >--Seleccione un cargo territorial--</option>');
 
     $("body").on("click", "#buscarCedula", function (e) {
@@ -41,7 +41,7 @@
                 $("#CargoId").find('option').remove();
                 $("#CargoId").append('<option >--Seleccione un cargo territorial--</option>');
                 $("#SupervisorId").find('option').remove();
-                $("#SupervisorId").append('<option >--Seleccione un cargo territorial--</option>');
+                $("#SupervisorId").append('<option value="0">--Seleccione un supervisor--</option>');
                 $(data).each(function (i, v) {
                     $("#CargoId").append('<option value="' + v.cargo.id + '">' + v.cargo.descripcion + '</option>');
                 })
@@ -67,8 +67,8 @@
 
                 if (data) {
 
-                    $("#SupervisorId").find('option').remove();
-                    $("#SupervisorId").append('<option >--Seleccione un cargo territorial--</option>');
+                   $("#SupervisorId").find('option').remove();
+                    $("#SupervisorId").append('<option value="0" >--Seleccione un supervisor--</option>');
 
                     $(data).each(function (i, v) {
                         $("#SupervisorId").append('<option value="' + v.id + '">' + v.nombres+ " "+v.apellidos + '</option>');

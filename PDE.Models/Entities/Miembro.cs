@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PDE.Models.Entities
 {
@@ -16,8 +17,8 @@ namespace PDE.Models.Entities
         public string Cedula { get; set; }
         public DateTime FechaNacimiento { get; set; }
         public string LugarNacimiento { get; set; }
-        public string Celular { get; set; }
-        public int? SupervisorId { get; set; }
+        public string Celular { get; set; }   
+        public int? SupervisorId { get; set; } = null!;
         public int? CategoriaId { get; set; }
         public int? SexoId { get; set; }
         public int? EstadoCivilId { get; set; }

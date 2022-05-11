@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,13 +8,15 @@ using System.Threading.Tasks;
 
 namespace PDE.Models.Entities.Identity
 {
-    public class RegisterModel
+    public class RegisterModel : IdentityUser
     {
 
-        public string Username { get; set; }
-
+        public int MiembroId { get; set; }
+        public string Cedula { get; set; }
         public string Celular { get; set; }
+        public int CargoId { get; set; }
+        public string Nombres { get; set; }
+        public string Apellidos { get; set; }
 
-        public string Password { get; set; }
     }
 }

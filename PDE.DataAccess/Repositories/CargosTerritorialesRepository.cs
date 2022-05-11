@@ -65,10 +65,10 @@ namespace PDE.DataAccess.Repositories
 
         }
 
-        public IEnumerable<CargoTerritorial> GetCargosByLocalidad(int LocalidadId)
+        public async Task<IEnumerable<CargoTerritorial>> GetCargosByLocalidad(int LocalidadId)
         {
-            var cargos = GetCargoTerritoriales().ToList();
-            var data =  cargos.Where(a => a.LocalidadId == LocalidadId).DistinctBy(a => a.CargoId).ToList();
+            var cargos = await GetCargoTerritoriales().ToListAsync();
+            var data =   cargos.Where(a => a.LocalidadId == LocalidadId).DistinctBy(a => a.CargoId);
 
             return data;
         }

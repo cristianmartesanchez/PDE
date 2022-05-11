@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -5,7 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PDE.DataAccess;
 using PDE.DataAccess.Repositories;
+using PDE.DataAccess.Service;
 using PDE.Models.Interfaces;
+using PDE.Models.Service;
 using PDE.Persistence;
 using PDE.Persistence.Padron;
 using System;
@@ -15,20 +18,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<DBPDEContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("PDEContext")));
-
-builder.Services.AddDbContext<PadronContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("PadronContext")));
-
 builder.Services.AddControllersWithViews()
     .AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 );
-
-builder.Services.AddTransient(typeof(IUnitOfWork), typeof(UnitOfWork));
 
 builder.Services.AddDistributedMemoryCache();
 
@@ -39,6 +32,16 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+
+builder.Services.AddHttpClient<IMiembroService, MiembroService>(client => { client.BaseAddress = new Uri("https://localhost:7295/"); });
+builder.Services.AddHttpClient<IProvinciaService, ProvinciaService>(client => { client.BaseAddress = new Uri("https://localhost:7295/"); });
+builder.Services.AddHttpClient<ICargoService, CargoService>(client => { client.BaseAddress = new Uri("https://localhost:7295/"); });
+builder.Services.AddHttpClient<ICargosTerritorialesService, CargosTerritorialesService>(client => { client.BaseAddress = new Uri("https://localhost:7295/"); });
+builder.Services.AddHttpClient<ILocalidadService, LocalidadService>(client => { client.BaseAddress = new Uri("https://localhost:7295/"); });
+builder.Services.AddHttpClient<IPadronService, PadronService>(client => { client.BaseAddress = new Uri("https://localhost:7295/"); });
+builder.Services.AddHttpClient<IEstructuraService, EstructuraService>(client => { client.BaseAddress = new Uri("https://localhost:7295/"); });
+builder.Services.AddHttpClient<IAuthenticateService, AuthenticateService>(client => { client.BaseAddress = new Uri("https://localhost:7295/"); });
 
 var app = builder.Build();
 
@@ -57,15 +60,11 @@ app.UseRouting();
 
 app.UseSession();
 
+app.UseAuthentication();
 app.UseAuthorization();
-
-
-//app.MapControllerRoute(
-//    name: "default",
-//    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Login}");
+    pattern: "{controller=Users}/{action=Login}");
 
 app.Run();

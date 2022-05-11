@@ -11,6 +11,6 @@ namespace PDE.Models.Interfaces
     {
         IQueryable<CargoTerritorial> GetCargosBySupervisor(int? cargoSupervisorId = null);
         IQueryable<CargoTerritorial> GetCargoTerritoriales();
-        IEnumerable<CargoTerritorial> GetCargosByLocalidad(int LocalidadId);
+        Task<IEnumerable<CargoTerritorial>> GetCargosByLocalidad(int LocalidadId);
     }
 }

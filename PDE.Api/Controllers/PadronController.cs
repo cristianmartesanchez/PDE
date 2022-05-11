@@ -13,7 +13,7 @@ using PDE.Models.Interfaces;
 
 namespace PDE.Api.Controllers
 {
-    [Authorize]
+
     [Route("api/[controller]")]
     [ApiController]
     public class PadronController : ControllerBase

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using PDE.Models.Entities.Identity;
 using System;
 using System.Collections.Generic;
@@ -40,10 +41,11 @@ namespace PDE.Api.Controllers
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 var userRoles = await _userManager.GetRolesAsync(user);
-
+                var str = JsonConvert.SerializeObject(user);
                 var authClaims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.UserData, str),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
@@ -53,31 +55,39 @@ namespace PDE.Api.Controllers
                 }
 
                 var token = GetToken(authClaims);
-
-                return Ok(new
+                return Ok(new TokenModel
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
+                    user = str,
                     expiration = token.ValidTo
                 });
             }
             return Unauthorized();
         }
 
+
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register(RegisterModel model)
         {
-            var userExists = await _userManager.FindByNameAsync(model.Username);
+            var userExists = await _userManager.FindByNameAsync(model.UserName);
             if (userExists != null)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "El usuario ya existe." });
 
-            IdentityUser user = new()
+            IdentityUser user =  new RegisterModel()
             {
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username,
-                PhoneNumber = model.Celular
+                UserName = model.UserName,
+                PhoneNumber = model.Celular,
+                Celular = model.Celular,
+                Cedula = model.Cedula,
+                MiembroId = model.MiembroId,  
+                CargoId = model.CargoId,
+                Nombres = model.Nombres,
+                Apellidos = model.Apellidos
             };
-            var result = await _userManager.CreateAsync(user, model.Password);
+            
+            var result = await _userManager.CreateAsync(user, $"Pde@{model.Cedula}");
             if (!result.Succeeded)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
 
@@ -92,7 +102,7 @@ namespace PDE.Api.Controllers
                 issuer: _configuration["JWT:ValidIssuer"],
                 audience: _configuration["JWT:ValidAudience"],
                 expires: DateTime.Now.AddHours(3),
-                claims: authClaims,
+                claims: authClaims,     
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                 );
 

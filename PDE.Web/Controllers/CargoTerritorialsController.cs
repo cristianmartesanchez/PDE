@@ -8,32 +8,46 @@ using Microsoft.EntityFrameworkCore;
 using PDE.DataAccess;
 using PDE.Models.Entities;
 using PDE.Models.Interfaces;
+using PDE.Models.Service;
 
 namespace PDE.Web.Controllers
 {
     public class CargoTerritorialsController : Controller
     {
 
-        private readonly IUnitOfWork _unitWork;
+        private ICargosTerritorialesService _cargosTerritorialesService;
+        private ICargoService _cargoService;
+        private ILocalidadService _localidadService;
+        private IEstructuraService _elestructuraService;
 
-        public CargoTerritorialsController(IUnitOfWork unitWork)
+        private string UrlBase = "api/CargoTerritorials/";
+        public CargoTerritorialsController(ICargosTerritorialesService cargosTerritorialesService,
+            ICargoService cargoService, ILocalidadService localidadService, IEstructuraService estructuraService)
         {
-            _unitWork = unitWork;
+            _cargosTerritorialesService = cargosTerritorialesService;
+            _cargoService = cargoService;
+            _localidadService = localidadService;
+            _elestructuraService = estructuraService;
         }
 
         // GET: CargoTerritorials
         public async Task<IActionResult> Index()
         {
-            var data = await _unitWork.CargosTerritoriales.GetCargoTerritoriales().ToListAsync();
+            var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
+            var data = await _cargosTerritorialesService.GetAll(UrlBase, token.Value);
             return View(data);
         }
 
         public async Task DropDown(int cargoId = 0, int localidadId = 0, int supervisorId = 0, int estructuraId = 0)
         {
-            ViewBag.CargoId = new SelectList(await _unitWork.Cargo.GetAll(), "Id", "Descripcion",cargoId);
-            ViewBag.LocalidadId = new SelectList(await _unitWork.Localidad.GetAll(), "Id", "Nombre", localidadId);
-            ViewBag.SupervisorId = new SelectList(await _unitWork.Cargo.GetAll(), "Id", "Descripcion", supervisorId);
-            ViewBag.EstructuraId = new SelectList(await _unitWork.Estructura.GetAll(),"Id","Descripcion", estructuraId);
+            var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
+            var cargos = await _cargoService.GetAll("api/Cargos",token.Value);
+            ViewBag.CargoId = new SelectList(cargos, "Id", "Descripcion",cargoId);
+            var localidades = await _localidadService.GetAll("api/Localidad",token.Value);
+            ViewBag.LocalidadId = new SelectList(localidades, "Id", "Nombre", localidadId);
+            ViewBag.SupervisorId = new SelectList(cargos, "Id", "Descripcion", supervisorId);
+            var estructura = await _elestructuraService.GetAll("api/Estructuras", token.Value);
+            ViewBag.EstructuraId = new SelectList(estructura, "Id","Descripcion", estructuraId);
         }
 
         // GET: CargoTerritorials/Create
@@ -50,8 +64,9 @@ namespace PDE.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _unitWork.CargosTerritoriales.Add(cargoTerritorial);
-                await _unitWork.Save();
+                var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
+                await _cargosTerritorialesService.Post(UrlBase,cargoTerritorial, token.Value);
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -67,7 +82,8 @@ namespace PDE.Web.Controllers
                 return NotFound();
             }
 
-            var cargoTerritorial = await _unitWork.CargosTerritoriales.GetById(id.Value);
+            var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
+            var cargoTerritorial = await _cargosTerritorialesService.Get($"{UrlBase}{id.Value}",token.Value);
             if (cargoTerritorial == null)
             {
                 return NotFound();
@@ -89,8 +105,9 @@ namespace PDE.Web.Controllers
             {
                 try
                 {
-                    _unitWork.CargosTerritoriales.Update(cargoTerritorial);
-                    await _unitWork.Save();
+                    var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
+                    await _cargosTerritorialesService.Put($"{UrlBase}{id}", cargoTerritorial, token.Value);
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -111,19 +128,20 @@ namespace PDE.Web.Controllers
 
 
         // POST: CargoTerritorials/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("Delete/{id}")]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var cargoTerritorial = await _unitWork.CargosTerritoriales.GetById(id);
-            _unitWork.CargosTerritoriales.Remove(cargoTerritorial);
-            await _unitWork.Save();
+            var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
+            await _cargosTerritorialesService.Delete($"{UrlBase}{id}",token.Value);
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> CargoTerritorialExists(int id)
         {
-            return (await _unitWork.CargosTerritoriales.GetAll()).Any(e => e.Id == id);
+            var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
+            var cargoTerritorial = await _cargosTerritorialesService.Get($"{UrlBase}{id}", token.Value);
+            return cargoTerritorial != null;
         }
     }
 }

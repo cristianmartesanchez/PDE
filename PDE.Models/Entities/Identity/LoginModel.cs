@@ -14,5 +14,7 @@ namespace PDE.Models.Entities.Identity
 
         [Required(ErrorMessage = "Contraseña requerida")]
         public string Password { get; set; }
+
+        public bool IsPersistent { get; set; }
     }
 }

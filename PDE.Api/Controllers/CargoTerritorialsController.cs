@@ -7,32 +7,49 @@ using PDE.Models.Entities;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using PDE.Models.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PDE.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CargoTerritorialsController : ControllerBase
     {
-        private readonly DBPDEContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CargoTerritorialsController(DBPDEContext context)
+        public CargoTerritorialsController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: api/CargoTerritorials
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CargoTerritorial>>> GetCargoTerritorials()
+        public async Task<IEnumerable<CargoTerritorial>> GetCargosTerritoriales()
         {
-            return await _context.CargoTerritorials.ToListAsync();
+            return await _unitOfWork.CargosTerritoriales.GetCargoTerritoriales().ToListAsync();
+        }
+
+        [HttpGet("GetCargosBySupervisor/{supervisorId}")]
+        public async Task<IEnumerable<CargoTerritorial>> GetCargosBySupervisor(int supervisorId)
+        {
+            var cargosTerritoriales = await _unitOfWork.CargosTerritoriales.GetCargosBySupervisor(supervisorId).ToListAsync();
+            return cargosTerritoriales;
+        }
+
+        [HttpGet("GetCargosByLocalidad/{localidadId}")]
+        public async Task<IEnumerable<CargoTerritorial>> GetCargosByLocalidad(int localidadId)
+        {
+            var cargosTerritoriales = await _unitOfWork.CargosTerritoriales.GetCargosByLocalidad(localidadId);
+            return cargosTerritoriales;
         }
 
         // GET: api/CargoTerritorials/5
         [HttpGet("{id}")]
         public async Task<ActionResult<CargoTerritorial>> GetCargoTerritorial(int id)
         {
-            var cargoTerritorial = await _context.CargoTerritorials.FindAsync(id);
+            var cargoTerritorial = await _unitOfWork.CargosTerritoriales.GetById(id);
 
             if (cargoTerritorial == null)
             {
@@ -45,22 +62,17 @@ namespace PDE.Api.Controllers
         // PUT: api/CargoTerritorials/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCargoTerritorial(int id, CargoTerritorial cargoTerritorial)
+        public async Task<IActionResult> PutCargoTerritorial(CargoTerritorial cargoTerritorial)
         {
-            if (id != cargoTerritorial.Id)
-            {
-                return BadRequest();
-            }
 
-            _context.Entry(cargoTerritorial).State = EntityState.Modified;
-
+            _unitOfWork.CargosTerritoriales.Update(cargoTerritorial);
             try
             {
-                await _context.SaveChangesAsync();
+                await _unitOfWork.Save();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CargoTerritorialExists(id))
+                if (!await CargoTerritorialExists(cargoTerritorial.Id))
                 {
                     return NotFound();
                 }
@@ -78,8 +90,8 @@ namespace PDE.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<CargoTerritorial>> PostCargoTerritorial(CargoTerritorial cargoTerritorial)
         {
-            _context.CargoTerritorials.Add(cargoTerritorial);
-            await _context.SaveChangesAsync();
+            await _unitOfWork.CargosTerritoriales.Add(cargoTerritorial);
+            await _unitOfWork.Save();
 
             return CreatedAtAction("GetCargoTerritorial", new { id = cargoTerritorial.Id }, cargoTerritorial);
         }
@@ -88,21 +100,21 @@ namespace PDE.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCargoTerritorial(int id)
         {
-            var cargoTerritorial = await _context.CargoTerritorials.FindAsync(id);
+            var cargoTerritorial = await _unitOfWork.CargosTerritoriales.GetById(id);
             if (cargoTerritorial == null)
             {
                 return NotFound();
             }
 
-            _context.CargoTerritorials.Remove(cargoTerritorial);
-            await _context.SaveChangesAsync();
+            _unitOfWork.CargosTerritoriales.Remove(cargoTerritorial);
+            await _unitOfWork.Save();
 
             return NoContent();
         }
 
-        private bool CargoTerritorialExists(int id)
+        private async Task<bool> CargoTerritorialExists(int id)
         {
-            return _context.CargoTerritorials.Any(e => e.Id == id);
+            return (await _unitOfWork.CargosTerritoriales.GetAll()).Any(e => e.Id == id);
         }
     }
 }

@@ -8,23 +8,25 @@ using Microsoft.EntityFrameworkCore;
 using PDE.DataAccess;
 using PDE.Models.Entities;
 using PDE.Models.Interfaces;
+using PDE.Models.Service;
 
 namespace PDE.Web.Controllers
 {
     public class CargosController : Controller
     {
-        private readonly IUnitOfWork _unitWork;
-
-        public CargosController(IUnitOfWork unitWork)
+        private ICargoService _cargoService;
+        private string urlBase = "api/Cargos/";
+        public CargosController(ICargoService cargoService)
         {
-            _unitWork = unitWork;
+            _cargoService = cargoService;
         }
 
         // GET: Cargos
         public async Task<IActionResult> Index()
         {
-           
-            return View(await _unitWork.Cargo.GetAll());
+            var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
+            var cargos = await _cargoService.GetAll(urlBase,token.Value); 
+            return View(cargos);
         }
 
         // GET: Cargos/Details/5
@@ -34,8 +36,8 @@ namespace PDE.Web.Controllers
             {
                 return NotFound();
             }
-
-            var cargo = await _unitWork.Cargo.GetById(id.Value);
+            var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
+            var cargo = await _cargoService.Get($"{urlBase}{id.Value}",token.Value);
             if (cargo == null)
             {
                 return NotFound();
@@ -57,8 +59,9 @@ namespace PDE.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _unitWork.Cargo.Add(cargo);
-                await _unitWork.Save();
+                var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
+                await _cargoService.Post($"{urlBase}",cargo,token.Value);
+
                 return RedirectToAction(nameof(Index));
             }
             return View(cargo);
@@ -72,7 +75,8 @@ namespace PDE.Web.Controllers
                 return NotFound();
             }
 
-            var cargo = await _unitWork.Cargo.GetById(id.Value);
+            var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
+            var cargo = await _cargoService.Get($"{urlBase}{id.Value}",token.Value);
             if (cargo == null)
             {
                 return NotFound();
@@ -94,8 +98,8 @@ namespace PDE.Web.Controllers
             {
                 try
                 {
-                    _unitWork.Cargo.Update(cargo);
-                    await _unitWork.Save();
+                    var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
+                    await _cargoService.Put($"{urlBase}{id}", cargo, token.Value);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -113,39 +117,26 @@ namespace PDE.Web.Controllers
             return View(cargo);
         }
 
-        // GET: Cargos/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var cargo = await _unitWork.Cargo.GetById(id.Value);
-            if (cargo == null)
-            {
-                return NotFound();
-            }
-
-            return View(cargo);
-        }
 
         // POST: Cargos/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("Delete/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var cargo = await _unitWork.Cargo.GetById(id);
-            _unitWork.Cargo.Remove(cargo);
-            await _unitWork.Save();
+
+            var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
+            var cargo = await _cargoService.Get($"{urlBase}{id}", token.Value);
+            await _cargoService.Delete($"{urlBase}{id}", token.Value);
+
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> CargoExists(int id)
         {
-            var cargos = await _unitWork.Cargo.GetAll();
+            var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
+            var cargo = await _cargoService.GetAll($"{urlBase}", token.Value);
 
-            return cargos.Any(a => a.Id == id);
+            return cargo.Any(a => a.Id == id);
         }
     }
 }
