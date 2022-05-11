@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PDE.Models.Interfaces;
 using PDE.Persistence;
 using System;
@@ -12,50 +14,52 @@ namespace PDE.DataAccess.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        protected readonly DBPDEContext _context;
-        public GenericRepository(DBPDEContext context)
+        protected readonly IdentityDbContext<IdentityUser> _context;
+        private DbSet<T> _entities;
+        public GenericRepository(IdentityDbContext<IdentityUser> context)
         {
             _context = context;
+            _entities = context.Set<T>();
         }
 
         public async Task Add(T entity)
         {
-            await _context.Set<T>().AddAsync(entity);
+            await _entities.AddAsync(entity);
         }
 
         public async Task AddRange(IEnumerable<T> entities)
         {
-            await _context.Set<T>().AddRangeAsync(entities);
+            await _entities.AddRangeAsync(entities);
         }
 
         public async Task<IEnumerable<T>> Find(Expression<Func<T, bool>> expression)
         {
-            return await _context.Set<T>().Where(expression).ToListAsync();
+            return await _entities.Where(expression).ToListAsync();
         }
 
         public async Task<IEnumerable<T>> GetAll()
         {
-            return await _context.Set<T>().ToListAsync();
+            return await _entities.ToListAsync();
         }
 
         public async Task<T> GetById(int id)
         {
-            return await _context.Set<T>().FindAsync(id);
+            return await _entities.FindAsync(id);
         }
 
         public void Remove(T entity)
         {
-            _context.Set<T>().Remove(entity);
+            _entities.Remove(entity);
         }
 
         public void RemoveRange(IEnumerable<T> entities)
         {
-            _context.Set<T>().RemoveRange(entities);
+            _entities.RemoveRange(entities);
         }
 
         public void Update(T entity)
         {
-            _context.Set<T>().Update(entity).State = EntityState.Modified;
+            _entities.Update(entity).State = EntityState.Modified;
         }
     }
 }

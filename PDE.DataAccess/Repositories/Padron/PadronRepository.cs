@@ -11,7 +11,7 @@ using System;
 
 namespace PDE.DataAccess.Repositories.Padron
 {
-    public class PadronRepository : GenericPadronRepository<P.Padron>, IPadronRepository
+    public class PadronRepository : GenericRepository<P.Padron>, IPadronRepository
     {
 
         private readonly PadronContext _context;

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using PDE.Models.Entities.Padron;
@@ -7,7 +9,7 @@ using PDE.Models.Entities.Padron;
 
 namespace PDE.Persistence.Padron
 {
-    public partial class PadronContext : DbContext
+    public partial class PadronContext : IdentityDbContext<IdentityUser>
     {
 
 
@@ -1275,6 +1277,7 @@ namespace PDE.Persistence.Padron
                     .IsFixedLength();
             });
 
+            base.OnModelCreating(modelBuilder);
             OnModelCreatingPartial(modelBuilder);
         }
 
