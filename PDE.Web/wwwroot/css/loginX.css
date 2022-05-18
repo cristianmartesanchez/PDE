@@ -1,0 +1,204 @@
+/*
+xx 1.0
+(c) DIRECCION XX - MAYO 2022.
+
+*/
+
+
+/* Login xxxx FP */
+
+.xx-login-card {
+    margin-top: 40px;
+    min-width: 440px;
+    border-radius: 10px;
+}
+
+.xx-login-background {
+    min-height: 800px;
+    height: 100vh;
+    width: auto;
+    min-width: 100%;
+    float: left;
+    background: url('../assets/img/background4.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+}
+
+.xx-xxxx-logo {
+    height: 180px;
+    background: url('../assets/img/xxxx-login.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 50% 50%;
+}
+
+.xx-xxxx-logo-mobile {
+    float: left;
+    display: block;
+    width: 100%;
+    height: 70px;
+    background: url('../assets/img/xxxx-login-mobile.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.xx-login-input .uk-form-icon {
+    color: #7fcc5f;
+}
+
+.xx-login-input input {
+    background: #e6e6e6;
+    color: #757575;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+    font-size: 25px;
+    line-height: 50px;
+    height: 50px;
+}
+
+.xx-login-input input::placeholder {
+    font-size: 16px;
+    line-height: 50px;
+}
+
+.uk-checkbox:checked,
+.uk-checkbox:indeterminate,
+.uk-radio:checked {
+    background-color: #7fcc5f !important;
+    border-color: transparent;
+}
+
+.xx-login-card .uk-button-default,
+.xx-login-card .uk-button-default:hover {
+    background-color: #77cc6d;
+    color: #fff;
+    border: 1px #77cc6d solid;
+    border-radius: 6px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 50px;
+    height: 50px;
+}
+
+.xx-login-background .uk-card-body {
+    padding-top: 20px;
+}
+
+
+/* UIKit Overrides */
+
+.xx-login-input .uk-input:focus,
+.xx-login-input .uk-select:focus,
+.xx-login-input .uk-textarea:focus {
+    outline: 0;
+    background-color: #fff;
+    color: #666;
+    border-color: #7fcc5f;
+}
+
+
+/* Mobile Menu */
+
+.xx-mobile-menu {
+    width: 100%;
+    height: 70px;
+    line-height: 70px;
+    background: #7fcc5f;
+    color: #fff;
+}
+
+.xx-mobile-menu a,
+.xx-mobile-menu a:hover {
+    color: #fff !important;
+    text-decoration: none;
+}
+
+.xx-mobile-menu .uk-navbar {
+    height: 70px;
+    line-height: 70px;
+    color: #fff;
+}
+
+.xx-mobile-menu .uk-navbar-item,
+.xx-mobile-menu .uk-navbar-nav>li>a,
+.xx-mobile-menu .uk-navbar-toggle {
+    min-height: 70px;
+}
+
+
+/* Media Queries */
+
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+    /* Styles */
+}
+
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    /* Styles */
+}
+
+@media only screen and (max-width: 959px) {
+    .xx-login-background {
+        min-height: 768px;
+        height: 100vh;
+        width: auto;
+        min-width: 100%;
+        float: left;
+        background: #fff;
+    }
+    .xx-login-background .uk-card-body {
+        padding-top: 20px;
+    }
+    .xx-login-card {
+        margin-top: 0px;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .xx-login-card {
+        min-width: 250px;
+        border-radius: 10px;
+        margin-top: 0px;
+    }
+    .xx-login-background .uk-card-body {
+        padding-top: 20px;
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    .xx-xxxx-logo {
+        height: 100px;
+        margin: 0px auto;
+        width: 70%;
+        background: url(../assets/img/xxxx-login.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: 50% 0%;
+    }
+}
+
+.grid-view tr>td:last-of-type,
+tr>th:last-of-type {
+    /*width: 1000px !important;*/
+    white-space: nowrap !important;
+    min-width: 120px;
+}
+
+@media (min-width: 1024px) {
+    .maindiv {
+        padding-left: 60px;
+    }
+}
+
+.mi-dropdown {
+    left: 20px !important;
+    width: calc(100% - 20px);
+}
+
+li .uk-accordion-content a {
+    display: block;
+}
+
+.uk-card-default {
+    color: #3c763d !important;
+}
