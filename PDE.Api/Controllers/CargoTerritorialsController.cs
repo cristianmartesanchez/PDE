@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using PDE.Models.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
+using PDE.Models.Dto;
 
 namespace PDE.Api.Controllers
 {
@@ -18,54 +20,57 @@ namespace PDE.Api.Controllers
     public class CargoTerritorialsController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public CargoTerritorialsController(IUnitOfWork unitOfWork)
+        public CargoTerritorialsController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         // GET: api/CargoTerritorials
         [HttpGet]
-        public async Task<IEnumerable<CargoTerritorial>> GetCargosTerritoriales()
+        public async Task<IEnumerable<CargoTerritorialDto>> GetCargosTerritoriales()
         {
-            return await _unitOfWork.CargosTerritoriales.GetCargoTerritoriales().ToListAsync();
+            var cargoTerritorial = await _unitOfWork.CargosTerritoriales.GetCargoTerritoriales().ToListAsync();
+            return _mapper.Map<IEnumerable<CargoTerritorialDto>>(cargoTerritorial);
         }
 
         [HttpGet("GetCargosBySupervisor/{supervisorId}")]
-        public async Task<IEnumerable<CargoTerritorial>> GetCargosBySupervisor(int supervisorId)
+        public async Task<IEnumerable<CargoTerritorialDto>> GetCargosBySupervisor(int supervisorId)
         {
             var cargosTerritoriales = await _unitOfWork.CargosTerritoriales.GetCargosBySupervisor(supervisorId).ToListAsync();
-            return cargosTerritoriales;
+            return _mapper.Map<IEnumerable<CargoTerritorialDto>>(cargosTerritoriales);
         }
 
         [HttpGet("GetCargosByLocalidad/{localidadId}")]
-        public async Task<IEnumerable<CargoTerritorial>> GetCargosByLocalidad(int localidadId)
+        public async Task<IEnumerable<CargoTerritorialDto>> GetCargosByLocalidad(int localidadId)
         {
             var cargosTerritoriales = await _unitOfWork.CargosTerritoriales.GetCargosByLocalidad(localidadId);
-            return cargosTerritoriales;
+            return _mapper.Map<IEnumerable<CargoTerritorialDto>>(cargosTerritoriales);
         }
 
         // GET: api/CargoTerritorials/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CargoTerritorial>> GetCargoTerritorial(int id)
+        public async Task<ActionResult<CargoTerritorialDto>> GetCargoTerritorial(int id)
         {
             var cargoTerritorial = await _unitOfWork.CargosTerritoriales.GetById(id);
-
+            
             if (cargoTerritorial == null)
             {
                 return NotFound();
             }
 
-            return cargoTerritorial;
+            return _mapper.Map<CargoTerritorialDto>(cargoTerritorial);
         }
 
         // PUT: api/CargoTerritorials/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCargoTerritorial(CargoTerritorial cargoTerritorial)
+        public async Task<IActionResult> PutCargoTerritorial(CargoTerritorialDto cargoTerritorial)
         {
-
-            _unitOfWork.CargosTerritoriales.Update(cargoTerritorial);
+            var data = _mapper.Map<CargoTerritorial>(cargoTerritorial);
+            _unitOfWork.CargosTerritoriales.Update(data);
             try
             {
                 await _unitOfWork.Save();
@@ -88,9 +93,10 @@ namespace PDE.Api.Controllers
         // POST: api/CargoTerritorials
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<CargoTerritorial>> PostCargoTerritorial(CargoTerritorial cargoTerritorial)
+        public async Task<ActionResult<CargoTerritorialDto>> PostCargoTerritorial(CargoTerritorialDto cargoTerritorial)
         {
-            await _unitOfWork.CargosTerritoriales.Add(cargoTerritorial);
+            var data = _mapper.Map<CargoTerritorial>(cargoTerritorial);
+            await _unitOfWork.CargosTerritoriales.Add(data);
             await _unitOfWork.Save();
 
             return CreatedAtAction("GetCargoTerritorial", new { id = cargoTerritorial.Id }, cargoTerritorial);

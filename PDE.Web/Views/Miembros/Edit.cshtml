@@ -1,10 +1,10 @@
-﻿@model PDE.Models.Entities.Miembro
+﻿@model PDE.Models.Dto.MiembroDto
 
 @{
     //ViewData["Title"] = "Miembro";
 }
 
-<h1 class="mt-4"></h1>
+@*<h1 class="mt-4"></h1>*@
 <div class="card">
     <div class="card-header text-white" style="background-color:#25a04d">
        <i class="fas fa-table me-1"></i>
@@ -115,8 +115,7 @@
                 </div>
                 <div class="col-md-6 form-group">
                     <label asp-for="LocalidadId" class="control-label">Localidad</label>
-@*                    @Html.DropDownListFor(model => model.LocalidadId, ViewBag.Localidad as SelectList,"--Seleccione una localidad--",new { @class="form-control"})*@
-                    <select asp-for="LocalidadId" asp-items="@ViewBag.Localidades" class="form-control"></select>
+                    @Html.DropDownListFor(model => model.LocalidadId, ViewBag.Localidades as SelectList,"--Seleccione una localidad--",new { @class="form-control"})
                     <span asp-validation-for="LocalidadId" class="text-danger"></span>
                 </div>
             </div>

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PDE.Models.Dto;
 using PDE.Models.Entities;
 using PDE.Models.Service;
 using System;
@@ -41,7 +42,7 @@ namespace PDE.DataAccess.Service
             
         }
 
-        public async Task<Cargo> Get(string URL, string accessToken)
+        public async Task<CargoDto> Get(string URL, string accessToken)
         {
             Initial(accessToken);
             var response = await _httpClient.GetAsync(URL);
@@ -50,7 +51,7 @@ namespace PDE.DataAccess.Service
                 response.EnsureSuccessStatusCode();
 
                 var respnoseText = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<Cargo>(respnoseText);
+                var data = JsonConvert.DeserializeObject<CargoDto>(respnoseText);
                 return data;
             }
             catch (HttpRequestException)
@@ -61,7 +62,7 @@ namespace PDE.DataAccess.Service
         }
 
 
-        public async Task<IEnumerable<Cargo>> GetAll(string URL, string accessToken)
+        public async Task<IEnumerable<CargoDto>> GetAll(string URL, string accessToken)
         {
             Initial(accessToken);
             var response = await _httpClient.GetAsync(URL);
@@ -70,19 +71,19 @@ namespace PDE.DataAccess.Service
                 response.EnsureSuccessStatusCode();
 
                 var respnoseText = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<IEnumerable<Cargo>>(respnoseText);
+                var data = JsonConvert.DeserializeObject<IEnumerable<CargoDto>>(respnoseText);
                 return data;
             }
             catch (HttpRequestException)
             {
 
-                return Enumerable.Empty<Cargo>();
+                return Enumerable.Empty<CargoDto>();
             }
 
         }
 
 
-        public async Task<Cargo> Post(string url, object body, string accessToken)
+        public async Task<CargoDto> Post(string url, object body, string accessToken)
         {
             Initial(accessToken);
             var json = JsonConvert.SerializeObject(body);
@@ -95,7 +96,7 @@ namespace PDE.DataAccess.Service
                 response.EnsureSuccessStatusCode();
 
                 var respnoseText = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<Cargo>(respnoseText);
+                var data = JsonConvert.DeserializeObject<CargoDto>(respnoseText);
                 return data;
             }
             catch (HttpRequestException)
@@ -107,7 +108,7 @@ namespace PDE.DataAccess.Service
 
         }
 
-        public async Task<Cargo> Put(string url, object body, string accessToken)
+        public async Task<CargoDto> Put(string url, object body, string accessToken)
         {
             Initial(accessToken);
             var json = JsonConvert.SerializeObject(body);
@@ -120,7 +121,7 @@ namespace PDE.DataAccess.Service
                 response.EnsureSuccessStatusCode();
 
                 var respnoseText = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<Cargo>(respnoseText);
+                var data = JsonConvert.DeserializeObject<CargoDto>(respnoseText);
                 return data;
             }
             catch (HttpRequestException)

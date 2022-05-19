@@ -1,4 +1,4 @@
-﻿using PDE.Models.Entities;
+﻿using PDE.Models.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +9,10 @@ namespace PDE.Models.Service
 {
     public interface ICargoService
     {
-        Task<Cargo> Get(string URL, string accessToken);
-        Task<IEnumerable<Cargo>> GetAll(string URL, string accessToken);
-        Task<Cargo> Post(string url, object body, string accessToken);
-        Task<Cargo> Put(string url, object body, string accessToken);
+        Task<CargoDto> Get(string URL, string accessToken);
+        Task<IEnumerable<CargoDto>> GetAll(string URL, string accessToken);
+        Task<CargoDto> Post(string url, object body, string accessToken);
+        Task<CargoDto> Put(string url, object body, string accessToken);
         Task<bool> Delete(string url, string accessToken);
     }
 }

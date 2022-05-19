@@ -3,11 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PDE.DataAccess;
+using PDE.Models.Dto;
 using PDE.Models.Entities;
 using PDE.Models.Interfaces;
 using PDE.Persistence;
@@ -20,29 +22,31 @@ namespace PDE.Api.Controllers
     public class CargosController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public CargosController(IUnitOfWork unitOfWork)
+        public CargosController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
         // GET: api/Cargos
         [HttpGet]
-        public async Task<IEnumerable<Cargo>> GetCargos()
+        public async Task<IEnumerable<CargoDto>> GetCargos()
         {
-            return await _unitOfWork.Cargo.GetAll();
+            return _mapper.Map<IEnumerable<CargoDto>>(await _unitOfWork.Cargo.GetAll());
         }
 
 
         [HttpGet("GetCargosByEstructura/{estructuraId}")]
-        public async Task<IEnumerable<Cargo>> GetCargosByEstructura(int estructuraId)
+        public async Task<IEnumerable<CargoDto>> GetCargosByEstructura(int estructuraId)
         {
             var data = (await _unitOfWork.Cargo.GetCargosByEstructura(estructuraId)).DistinctBy(a => a.Id);
-            return data;
+            return _mapper.Map<IEnumerable<CargoDto>>(data);
         }
 
         // GET: api/Cargos/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Cargo>> GetCargo(int id)
+        public async Task<ActionResult<CargoDto>> GetCargo(int id)
         {
             var cargo = await _unitOfWork.Cargo.GetById(id);
 
@@ -51,20 +55,20 @@ namespace PDE.Api.Controllers
                 return NotFound();
             }
 
-            return cargo;
+            return _mapper.Map<CargoDto>(cargo);
         }
 
         // PUT: api/Cargos/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCargo(int id, Cargo cargo)
+        public async Task<IActionResult> PutCargo(int id, CargoDto cargo)
         {
             if (id != cargo.Id)
             {
                 return BadRequest();
             }
-
-            _unitOfWork.Cargo.Update(cargo);
+            var data = _mapper.Map<Cargo>(cargo);
+            _unitOfWork.Cargo.Update(data);
 
             try
             {
@@ -88,9 +92,10 @@ namespace PDE.Api.Controllers
         // POST: api/Cargos
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Cargo>> PostCargo(Cargo cargo)
+        public async Task<ActionResult<CargoDto>> PostCargo(CargoDto cargo)
         {
-            await _unitOfWork.Cargo.Add(cargo);
+            var data = _mapper.Map<Cargo>(cargo);
+            await _unitOfWork.Cargo.Add(data);
             await _unitOfWork.Save();
 
             return CreatedAtAction("GetCargo", new { id = cargo.Id }, cargo);

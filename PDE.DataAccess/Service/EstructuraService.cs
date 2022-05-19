@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PDE.Models.Dto;
 using PDE.Models.Entities;
 using PDE.Models.Service;
 using System;
@@ -41,7 +42,7 @@ namespace PDE.DataAccess.Service
             
         }
 
-        public async Task<Estructura> Get(string URL, string accessToken)
+        public async Task<EstructuraDto> Get(string URL, string accessToken)
         {
             Initial(accessToken);
             var response = await _httpClient.GetAsync(URL);
@@ -50,7 +51,7 @@ namespace PDE.DataAccess.Service
                 response.EnsureSuccessStatusCode();
 
                 var respnoseText = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<Estructura>(respnoseText);
+                var data = JsonConvert.DeserializeObject<EstructuraDto>(respnoseText);
                 return data;
             }
             catch (HttpRequestException)
@@ -62,7 +63,7 @@ namespace PDE.DataAccess.Service
         }
 
 
-        public async Task<IEnumerable<Estructura>> GetAll(string URL, string accessToken)
+        public async Task<IEnumerable<EstructuraDto>> GetAll(string URL, string accessToken)
         {
             Initial(accessToken);
             var response = await _httpClient.GetAsync(URL);
@@ -71,19 +72,19 @@ namespace PDE.DataAccess.Service
                 response.EnsureSuccessStatusCode();
 
                 var respnoseText = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<IEnumerable<Estructura>>(respnoseText);
+                var data = JsonConvert.DeserializeObject<IEnumerable<EstructuraDto>>(respnoseText);
                 return data;
             }
             catch (HttpRequestException)
             {
 
-                return Enumerable.Empty<Estructura>();
+                return Enumerable.Empty<EstructuraDto>();
             }
 
         }
 
 
-        public async Task<Estructura> Post(string url, object body, string accessToken)
+        public async Task<EstructuraDto> Post(string url, object body, string accessToken)
         {
             Initial(accessToken);
             var json = JsonConvert.SerializeObject(body);
@@ -96,7 +97,7 @@ namespace PDE.DataAccess.Service
                 response.EnsureSuccessStatusCode();
 
                 var respnoseText = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<Estructura>(respnoseText);
+                var data = JsonConvert.DeserializeObject<EstructuraDto>(respnoseText);
                 return data;
             }
             catch (HttpRequestException)
@@ -108,7 +109,7 @@ namespace PDE.DataAccess.Service
 
         }
 
-        public async Task<Estructura> Put(string url, object body, string accessToken)
+        public async Task<EstructuraDto> Put(string url, object body, string accessToken)
         {
             Initial(accessToken);
             var json = JsonConvert.SerializeObject(body);
@@ -121,7 +122,7 @@ namespace PDE.DataAccess.Service
                 response.EnsureSuccessStatusCode();
 
                 var respnoseText = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<Estructura>(respnoseText);
+                var data = JsonConvert.DeserializeObject<EstructuraDto>(respnoseText);
                 return data;
             }
             catch (HttpRequestException)

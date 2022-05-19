@@ -1,4 +1,5 @@
-﻿using PDE.Models.Entities;
+﻿using PDE.Models.Dto;
+using PDE.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace PDE.Models.Service
 {
     public interface ILocalidadService
     {
-        Task<Localidad> Get(string URL, string accessToken);
-        Task<IEnumerable<Localidad>> GetAll(string URL, string accessToken);
+        Task<LocalidadDto> Get(string URL, string accessToken);
+        Task<IEnumerable<LocalidadDto>> GetAll(string URL, string accessToken);
     }
 }

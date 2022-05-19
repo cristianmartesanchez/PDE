@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PDE.Models.Entities.Miembro>
+﻿@model IEnumerable<PDE.Models.Dto.MiembroDto>
 <div class="row">
 <table  class="table table-bordered" style="border-collapse:collapse;" id="dataTable">
   <thead>
@@ -7,6 +7,7 @@
           <th>Apellidos</th>
           <th>Cedula</th>
           <th>Cargo</th>
+          <th>Supervisor</th>
       </tr>
   </thead>
   <tfoot>
@@ -15,6 +16,7 @@
           <th>Apellidos</th>
           <th>Cedula</th>
           <th>Cargo</th>
+          <th>Supervisor</th>
       </tr>
   </tfoot>
   <tbody>
@@ -31,6 +33,9 @@
             </td>
             <td>
                 @item.Cargo.Descripcion
+            </td>
+            <td>
+                @($"{item.Supervisor.Nombres} {item.Supervisor.Apellidos}")
             </td>
         </tr>
      }

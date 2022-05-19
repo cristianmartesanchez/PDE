@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PDE.Models.Dto;
 using PDE.Models.Entities;
 using PDE.Models.Service;
 using System;
@@ -25,7 +26,7 @@ namespace PDE.DataAccess.Service
 
         }
 
-        public async Task<CargoTerritorial> Get(string URL, string accessToken)
+        public async Task<CargoTerritorialDto> Get(string URL, string accessToken)
         {
             Initial(accessToken);
             var response = await _httpClient.GetAsync(URL);
@@ -34,7 +35,7 @@ namespace PDE.DataAccess.Service
                 response.EnsureSuccessStatusCode();
 
                 var respnoseText = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<CargoTerritorial>(respnoseText);
+                var data = JsonConvert.DeserializeObject<CargoTerritorialDto>(respnoseText);
                 return data;
             }
             catch (HttpRequestException)
@@ -45,7 +46,7 @@ namespace PDE.DataAccess.Service
         }
 
 
-        public async Task<IEnumerable<CargoTerritorial>> GetAll(string URL, string accessToken)
+        public async Task<IEnumerable<CargoTerritorialDto>> GetAll(string URL, string accessToken)
         {
             Initial(accessToken);
             var response = await _httpClient.GetAsync(URL);
@@ -54,18 +55,18 @@ namespace PDE.DataAccess.Service
                 response.EnsureSuccessStatusCode();
 
                 var respnoseText = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<IEnumerable<CargoTerritorial>>(respnoseText);
+                var data = JsonConvert.DeserializeObject<IEnumerable<CargoTerritorialDto>>(respnoseText);
                 return data;
             }
             catch (HttpRequestException)
             {
 
-                return Enumerable.Empty<CargoTerritorial>();
+                return Enumerable.Empty<CargoTerritorialDto>();
             }
 
         }
 
-        public async Task<CargoTerritorial> Post(string url, object body, string accessToken)
+        public async Task<CargoTerritorialDto> Post(string url, object body, string accessToken)
         {
             Initial(accessToken);
             var json = JsonConvert.SerializeObject(body);
@@ -78,7 +79,7 @@ namespace PDE.DataAccess.Service
                 response.EnsureSuccessStatusCode();
 
                 var respnoseText = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<CargoTerritorial>(respnoseText);
+                var data = JsonConvert.DeserializeObject<CargoTerritorialDto>(respnoseText);
                 return data;
             }
             catch (HttpRequestException)
@@ -90,7 +91,7 @@ namespace PDE.DataAccess.Service
 
         }
 
-        public async Task<CargoTerritorial> Put(string url, object body, string accessToken)
+        public async Task<CargoTerritorialDto> Put(string url, object body, string accessToken)
         {
             Initial(accessToken);
             var json = JsonConvert.SerializeObject(body);
@@ -103,7 +104,7 @@ namespace PDE.DataAccess.Service
                 response.EnsureSuccessStatusCode();
 
                 var respnoseText = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<CargoTerritorial>(respnoseText);
+                var data = JsonConvert.DeserializeObject<CargoTerritorialDto>(respnoseText);
                 return data;
             }
             catch (HttpRequestException)

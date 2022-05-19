@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using AutoMapper;
+using PDE.Models.AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
@@ -62,6 +64,11 @@ builder.Services.AddAuthentication(options =>
     };
 });
 builder.Services.AddEndpointsApiExplorer();
+
+// Auto Mapper Configurations
+var mappingConfig = new MapperConfiguration( a =>{ a.AddProfile(new MappingProfile()); });
+IMapper mapper = mappingConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 
 builder.Services.AddTransient(typeof(IUnitOfWork), typeof(UnitOfWork));
 

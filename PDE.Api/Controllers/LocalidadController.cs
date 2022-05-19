@@ -3,11 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PDE.DataAccess;
+using PDE.Models.Dto;
 using PDE.Models.Entities;
 using PDE.Models.Interfaces;
 using PDE.Persistence;
@@ -20,23 +22,27 @@ namespace PDE.Api.Controllers
     public class LocalidadController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public LocalidadController(IUnitOfWork unitOfWork)
+        public LocalidadController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
+
         }
 
         // GET: api/Localidad
         [HttpGet]
-        public async Task<IEnumerable<Localidad>> GetLocalidads()
+        public async Task<IEnumerable<LocalidadDto>> GetLocalidads()
         {
             var localidades = await _unitOfWork.Localidad.GetAll();
-            return localidades;
+            var data = _mapper.Map<IEnumerable<LocalidadDto>>(localidades);
+            return data;
         }
 
         // GET: api/Localidad/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Localidad>> GetLocalidad(int id)
+        public async Task<ActionResult<LocalidadDto>> GetLocalidad(int id)
         {
             var localidad = await _unitOfWork.Localidad.GetById(id);
 
@@ -44,20 +50,20 @@ namespace PDE.Api.Controllers
             {
                 return NotFound();
             }
-
-            return localidad;
+            var data = _mapper.Map<LocalidadDto>(localidad);
+            return data;
         }
 
         // PUT: api/Localidad/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutLocalidad(int id, Localidad localidad)
+        public async Task<IActionResult> PutLocalidad(int id, LocalidadDto localidad)
         {
             if (id != localidad.Id)
             {
                 return BadRequest();
             }
-
-            _unitOfWork.Localidad.Update(localidad);
+            var data = _mapper.Map<Localidad>(localidad);
+            _unitOfWork.Localidad.Update(data);
 
             try
             {
@@ -80,9 +86,10 @@ namespace PDE.Api.Controllers
 
         // POST: api/Localidad
         [HttpPost]
-        public async Task<ActionResult<Localidad>> PostLocalidad(Localidad localidad)
+        public async Task<ActionResult<LocalidadDto>> PostLocalidad(LocalidadDto localidad)
         {
-            await _unitOfWork.Localidad.Add(localidad);
+            var data = _mapper.Map<Localidad>(localidad);
+            await _unitOfWork.Localidad.Add(data);
             await _unitOfWork.Save();
 
             return CreatedAtAction("GetLocalidad", new { id = localidad.Id }, localidad);

@@ -3,28 +3,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PDE.DataAccess;
+using PDE.Models.Dto;
 using PDE.Models.Entities.Padron;
 using PDE.Models.Interfaces;
 
 namespace PDE.Api.Controllers
 {
-
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PadronController : ControllerBase
     {
 
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public PadronController(IUnitOfWork unitOfWork)
+        public PadronController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
-
+            _mapper = mapper;
         }
 
 
@@ -35,7 +38,7 @@ namespace PDE.Api.Controllers
 
             if (data == null)
             {
-                return NotFound(cedula);
+                return NotFound();
             }
 
             return Ok(data);
@@ -43,9 +46,5 @@ namespace PDE.Api.Controllers
 
       
 
-        //private bool PadronExists(string id)
-        //{
-        //    return _context.Padrons.Any(e => e.Cedula == id);
-        //}
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PDE.Models.Dto;
 using PDE.Models.Entities;
 using PDE.Models.Service;
 using System;
@@ -26,7 +27,7 @@ namespace PDE.DataAccess.Service
             
         }
 
-        public async Task<Miembro> Get(string URL, string accessToken)
+        public async Task<MiembroDto> Get(string URL, string accessToken)
         {
 
             Initial(accessToken);
@@ -36,7 +37,7 @@ namespace PDE.DataAccess.Service
             {
                 response.EnsureSuccessStatusCode();
                 var respnoseText = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<Miembro>(respnoseText);
+                var data = JsonConvert.DeserializeObject<MiembroDto>(respnoseText);
                 return data;
             }
             catch (HttpRequestException)
@@ -48,7 +49,7 @@ namespace PDE.DataAccess.Service
         }
 
 
-        public async Task<IEnumerable<Miembro>> GetAll(string URL, string accessToken)
+        public async Task<IEnumerable<MiembroDto>> GetAll(string URL, string accessToken)
         {
             Initial(accessToken);
             var response = await _httpClient.GetAsync(URL);
@@ -57,17 +58,17 @@ namespace PDE.DataAccess.Service
             {
                 response.EnsureSuccessStatusCode();
                 var respnoseText = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<IEnumerable<Miembro>>(respnoseText);
+                var data = JsonConvert.DeserializeObject<IEnumerable<MiembroDto>>(respnoseText);
                 return data;
             }
             catch (HttpRequestException)
             {
-                return Enumerable.Empty<Miembro>();
+                return Enumerable.Empty<MiembroDto>();
             }
 
         }
 
-        public async Task<Miembro> Post(string url, object body, string accessToken)
+        public async Task<MiembroDto> Post(string url, object body, string accessToken)
         {
             Initial(accessToken);
             var json = JsonConvert.SerializeObject(body);
@@ -80,7 +81,7 @@ namespace PDE.DataAccess.Service
                 response.EnsureSuccessStatusCode();
 
                 var respnoseText = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<Miembro>(respnoseText);
+                var data = JsonConvert.DeserializeObject<MiembroDto>(respnoseText);
                 return data;
             }
             catch (HttpRequestException)
@@ -91,7 +92,7 @@ namespace PDE.DataAccess.Service
             
         }
 
-        public async Task<Miembro> Put(string url, object body, string accessToken)
+        public async Task<MiembroDto> Put(string url, object body, string accessToken)
         {
             Initial(accessToken);
             var json = JsonConvert.SerializeObject(body);
@@ -104,7 +105,7 @@ namespace PDE.DataAccess.Service
                 response.EnsureSuccessStatusCode();
 
                 var respnoseText = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<Miembro>(respnoseText);
+                var data = JsonConvert.DeserializeObject<MiembroDto>(respnoseText);
                 return data;
             }
             catch (HttpRequestException)

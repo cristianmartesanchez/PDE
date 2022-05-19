@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using PDE.DataAccess;
 using PDE.DataAccess.Service;
+using PDE.Models.Dto;
 using PDE.Models.Entities;
 using PDE.Models.Entities.Identity;
 using PDE.Models.Interfaces;
@@ -116,7 +117,7 @@ namespace PDE.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Miembro miembro)
+        public async Task<IActionResult> Create(MiembroDto miembro)
         {
             var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
             if (ModelState.IsValid)
@@ -182,7 +183,7 @@ namespace PDE.Web.Controllers
         // POST: Miembros/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Miembro miembro)
+        public async Task<IActionResult> Edit(int id, MiembroDto miembro)
         {
             var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
             if (id != miembro.Id)

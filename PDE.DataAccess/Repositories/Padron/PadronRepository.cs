@@ -8,6 +8,7 @@ using PDE.Persistence.Padron;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
+using PDE.Models.Dto;
 
 namespace PDE.DataAccess.Repositories.Padron
 {
@@ -20,7 +21,7 @@ namespace PDE.DataAccess.Repositories.Padron
             _context = context;
         }
 
-        public async Task<Miembro> GetPadron(string cedula)
+        public async Task<MiembroDto> GetPadron(string cedula)
         {
 
             var data = await (from a in _context.Padrons 
@@ -38,7 +39,7 @@ namespace PDE.DataAccess.Repositories.Padron
                               join ec in _context.EstadoCivils on a.IdEstadoCivil equals ec.Id into o
                               from p in o.DefaultIfEmpty()
                               where a.Cedula == cedula 
-                              select new Miembro
+                              select new MiembroDto
                               {
                                   Nombres = a.Nombres,
                                   Apellidos = a.Apellido1 +" "+a.Apellido2,
@@ -52,51 +53,51 @@ namespace PDE.DataAccess.Repositories.Padron
                                   NacionalidadId = a.Idnacionalidad,
                                   OcupacionId = a.IdOcupacion,                                  
                                   SexoId = (int?)Enum.Parse<Enums.Sexo>(a.IdSexo),
-                                  Sexo = new Sexo
+                                  Sexo = new SexoDto
                                   {
                                       Descripcion = n.Descripcion
                                   },
-                                  EstadoCivil = new EstadoCivil
+                                  EstadoCivil = new EstadoCivilDto
                                   {
                                       Descripcion = p.Descripcion
                                   },
-                                  Municipio = new Municipio
+                                  Municipio = new MunicipioDto
                                   {
                                       Id = b.Id,
                                       Descripcion = b.Descripcion,
                                       ProvinciaId = c.Id,
-                                      Provincia = new Provincia
+                                      Provincia = new ProvinciaDto
                                       {
                                           Id = c.Id,
                                           Descripcion = c.Descripcion
                                       }
                                   },
-                                  Nacionalidad = new Nacionalidad
+                                  Nacionalidad = new NacionalidadDto
                                   {
                                       Id = d.Id,
                                       Descripcion = d.Descripcion                                
                                   },
-                                  Categoria = new Categoria
+                                  Categoria = new CategoriaDto
                                   {
                                       Id = e.Id,
                                       Descripcion = e.Descripcion
                                   },
-                                  Ocupacion = new Ocupacion
+                                  Ocupacion = new OcupacionDto
                                   {
                                       Id = f.Id,
                                       Descripcion = f.Descripcion
                                   },
-                                  Colegio = new Colegio
+                                  Colegio = new ColegioDto
                                   {
                                       Id = g.Idcolegio,
                                       Descripcion= g.Descripcion,
                                       RecintoId = g.Idrecinto,
-                                      Recinto = new Recinto
+                                      Recinto = new RecintoDto
                                       {
                                           Id = h.Id,
                                           Descripcion = h.Descripcion,
                                           CodigoRecinto = h.CodigoRecinto,
-                                          Circunscripcion = new Circunscripcion
+                                          Circunscripcion = new CircunscripcionDto
                                           {
                                               Id = k.Id,
                                               Descripcion = k.Descripcion

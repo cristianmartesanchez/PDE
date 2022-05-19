@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PDE.Models.Dto;
 using PDE.Models.Entities;
 using PDE.Models.Interfaces;
 using PDE.Persistence;
@@ -18,22 +20,25 @@ namespace PDE.Api.Controllers
     public class EstructurasController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public EstructurasController(IUnitOfWork unitOfWork)
+        public EstructurasController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         // GET: api/Estructuras
         [HttpGet]
-        public async Task<IEnumerable<Estructura>> GetEstructuras()
+        public async Task<IEnumerable<EstructuraDto>> GetEstructuras()
         {
-            return await _unitOfWork.Estructura.GetAll();
+            var estructuras = await _unitOfWork.Estructura.GetAll();
+            return _mapper.Map<IEnumerable<EstructuraDto>>(estructuras);
         }
 
         // GET: api/Estructuras/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Estructura>> GetEstructura(int id)
+        public async Task<ActionResult<EstructuraDto>> GetEstructura(int id)
         {
             var estructura = await _unitOfWork.Estructura.GetById(id);
 
@@ -41,20 +46,21 @@ namespace PDE.Api.Controllers
             {
                 return NotFound();
             }
+            var data = _mapper.Map<EstructuraDto>(estructura);
 
-            return estructura;
+            return data;
         }
 
         // PUT: api/Estructuras/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEstructura(int id, Estructura estructura)
+        public async Task<IActionResult> PutEstructura(int id, EstructuraDto estructura)
         {
             if (id != estructura.Id)
             {
                 return BadRequest();
             }
-
-            _unitOfWork.Estructura.Update(estructura);
+            var data = _mapper.Map<Estructura>(estructura);
+            _unitOfWork.Estructura.Update(data);
 
             try
             {
@@ -77,9 +83,10 @@ namespace PDE.Api.Controllers
 
         // POST: api/Estructuras
         [HttpPost]
-        public async Task<ActionResult<Estructura>> PostEstructura(Estructura estructura)
+        public async Task<ActionResult<Estructura>> PostEstructura(EstructuraDto estructura)
         {
-            await _unitOfWork.Estructura.Add(estructura);
+            var data = _mapper.Map<Estructura>(estructura);
+            await _unitOfWork.Estructura.Add(data);
             await _unitOfWork.Save();
 
             return CreatedAtAction("GetEstructura", new { id = estructura.Id }, estructura);

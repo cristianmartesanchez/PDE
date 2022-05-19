@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PDE.Models.Dto;
 using PDE.Models.Entities;
 using PDE.Models.Interfaces;
 using PDE.Persistence;
@@ -17,7 +18,7 @@ namespace PDE.DataAccess.Repositories
             _context = context;
         }
 
-        public async Task<Miembro> GetMiembroByCedula(string cedula)
+        public async Task<MiembroDto> GetMiembroByCedula(string cedula)
         {
             var miembros =  GetMiembros();
             var data = await miembros.FirstOrDefaultAsync(a => a.Cedula == cedula);
@@ -26,7 +27,7 @@ namespace PDE.DataAccess.Repositories
         }
 
 
-        public IQueryable<Miembro> GetMiembros()
+        public IQueryable<MiembroDto> GetMiembros()
         {
            
             var data =  (from a in _context.Miembros
@@ -49,7 +50,7 @@ namespace PDE.DataAccess.Repositories
                         join rc in _context.Recintos on co.RecintoId equals rc.Id
                         join cc in _context.Circunscripcions on rc.CircunscripcionId equals cc.Id into ccp
                         from cp in ccp.DefaultIfEmpty()
-                        select new Miembro
+                        select new MiembroDto
                         {
                             Id = a.Id,
                             Nombres = a.Nombres,
@@ -68,75 +69,75 @@ namespace PDE.DataAccess.Repositories
                             CategoriaId = a.CategoriaId,
                             MunicipioId = a.MunicipioId,     
                             LocalidadId = a.LocalidadId,
-                            Supervisor = new Miembro
+                            Supervisor = new MiembroDto
                             {
                                 Nombres = d.Nombres,
                                 Apellidos = d.Apellidos
                             },
                             EstructuraId = a.EstructuraId,
-                            Estructura = new Estructura
+                            Estructura = new EstructuraDto
                             {
                                 Descripcion = e.Descripcion
                             },
-                            Cargo = new Cargo
+                            Cargo = new CargoDto
                             {
                                 Id = a.CargoId,
                                 Descripcion = i.Descripcion
                             },
 
-                            Localidad = new Localidad
+                            Localidad = new LocalidadDto
                             {
                                 Id = lo.Id,
                                 Nombre = lo.Nombre
                             },
 
-                            Municipio = new Municipio
+                            Municipio = new MunicipioDto
                             {
                                 Id = o.Id,
                                 Descripcion = o.Descripcion,
                                 ProvinciaId = r.Id,
-                                Provincia = new Provincia
+                                Provincia = new ProvinciaDto
                                 {
                                     Id = r.Id,
                                     Descripcion = r.Descripcion
                                 }
                             },
-                            Nacionalidad = new Nacionalidad
+                            Nacionalidad = new NacionalidadDto
                             {
                                 Id = s.Id,
                                 Descripcion = s.Descripcion
                             },
-                            Categoria = new Categoria
+                            Categoria = new CategoriaDto
                             {
                                 
                                 Descripcion = l.Descripcion
                             },
-                            Ocupacion = new Ocupacion
+                            Ocupacion = new OcupacionDto
                             {
                                 Id = oc.Id,
                                 Descripcion = oc.Descripcion
                             },
-                            EstadoCivil = new EstadoCivil
+                            EstadoCivil = new EstadoCivilDto
                             {
                                 Id = ec.Id,
                                 Descripcion= ec.Descripcion
                             },
-                            Sexo = new Sexo
+                            Sexo = new SexoDto
                             {
                                 Id = sx.Id,
                                 Descripcion = sx.Descripcion
                             },
-                            Colegio = new Colegio
+                            Colegio = new ColegioDto
                             {
                                 Id = co.Id,
                                 Descripcion = co.Descripcion,
                                 RecintoId = co.RecintoId,
-                                Recinto = new Recinto
+                                Recinto = new RecintoDto
                                 {
                                     Id = rc.Id,
                                     Descripcion = rc.Descripcion,
                                     CodigoRecinto = rc.CodigoRecinto,
-                                    Circunscripcion = new Circunscripcion
+                                    Circunscripcion = new CircunscripcionDto
                                     {
                                         Id = cp.Id,
                                         Descripcion = cp.Descripcion
@@ -149,14 +150,14 @@ namespace PDE.DataAccess.Repositories
             return data;
         }
 
-        public IQueryable<Miembro> GetMiembrosBySupervisor(int supervisorId)
+        public IQueryable<MiembroDto> GetMiembrosBySupervisor(int supervisorId)
         {
             var miembros = GetMiembros();
             var data = miembros.Where(a => a.SupervisorId == supervisorId);
             return data;
         }
 
-        public async Task<IEnumerable<Miembro>> GetMiembrosByCargo(int cargoId)
+        public async Task<IEnumerable<MiembroDto>> GetMiembrosByCargo(int cargoId)
         {
                        
             var miembros = GetMiembros();            
@@ -165,7 +166,7 @@ namespace PDE.DataAccess.Repositories
             return data;
         }
 
-        public async Task<IEnumerable<Miembro>> GetSupervisorByCargo(int CargoId, int LocalidadId)
+        public async Task<IEnumerable<MiembroDto>> GetSupervisorByCargo(int CargoId, int LocalidadId)
         {
 
             var miembros = await (from a in GetMiembros()

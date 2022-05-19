@@ -1,4 +1,5 @@
-﻿using PDE.Models.Entities;
+﻿using PDE.Models.Dto;
+using PDE.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,9 @@ namespace PDE.Models.Service
 {
     public interface IMiembroService
     {
-        Task<Miembro> Get(string URL, string accessToken);
-        Task<IEnumerable<Miembro>> GetAll(string URL, string accessToken);
-        Task<Miembro> Post(string url, object body, string accessToken);
-        Task<Miembro> Put(string url, object body, string accessToken);
+        Task<MiembroDto> Get(string URL, string accessToken);
+        Task<IEnumerable<MiembroDto>> GetAll(string URL, string accessToken);
+        Task<MiembroDto> Post(string url, object body, string accessToken);
+        Task<MiembroDto> Put(string url, object body, string accessToken);
     }
 }

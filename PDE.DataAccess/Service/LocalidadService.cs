@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PDE.Models.Dto;
 using PDE.Models.Entities;
 using PDE.Models.Service;
 using System;
@@ -25,7 +26,7 @@ namespace PDE.DataAccess.Service
 
         }
 
-        public async Task<Localidad> Get(string URL, string accessToken)
+        public async Task<LocalidadDto> Get(string URL, string accessToken)
         {
             Initial(accessToken);
             var response = await _httpClient.GetAsync(URL);
@@ -34,7 +35,7 @@ namespace PDE.DataAccess.Service
                 response.EnsureSuccessStatusCode();
 
                 var respnoseText = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<Localidad>(respnoseText);
+                var data = JsonConvert.DeserializeObject<LocalidadDto>(respnoseText);
                 return data;
             }
             catch (HttpRequestException)
@@ -46,7 +47,7 @@ namespace PDE.DataAccess.Service
         }
 
 
-        public async Task<IEnumerable<Localidad>> GetAll(string URL, string accessToken)
+        public async Task<IEnumerable<LocalidadDto>> GetAll(string URL, string accessToken)
         {
             Initial(accessToken);
             var response = await _httpClient.GetAsync(URL);
@@ -55,12 +56,12 @@ namespace PDE.DataAccess.Service
                 response.EnsureSuccessStatusCode();
 
                 var respnoseText = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<IEnumerable<Localidad>>(respnoseText);
+                var data = JsonConvert.DeserializeObject<IEnumerable<LocalidadDto>>(respnoseText);
                 return data;
             }
             catch (HttpRequestException)
             {
-                return Enumerable.Empty<Localidad>();
+                return Enumerable.Empty<LocalidadDto>();
             }
 
         }

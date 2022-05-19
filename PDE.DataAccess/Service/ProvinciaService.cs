@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PDE.Models.Dto;
 using PDE.Models.Entities;
 using PDE.Models.Service;
 using System;
@@ -25,7 +26,7 @@ namespace PDE.DataAccess.Service
 
         }
 
-        public async Task<Provincia> Get(string URL, string accessToken)
+        public async Task<ProvinciaDto> Get(string URL, string accessToken)
         {
             Initial(accessToken);
             var response = await _httpClient.GetAsync(URL);
@@ -34,7 +35,7 @@ namespace PDE.DataAccess.Service
                 response.EnsureSuccessStatusCode();
 
                 var respnoseText = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<Provincia>(respnoseText);
+                var data = JsonConvert.DeserializeObject<ProvinciaDto>(respnoseText);
                 return data;
             }
             catch (HttpRequestException)
@@ -45,7 +46,7 @@ namespace PDE.DataAccess.Service
         }
 
 
-        public async Task<IEnumerable<Provincia>> GetAll(string URL, string accessToken)
+        public async Task<IEnumerable<ProvinciaDto>> GetAll(string URL, string accessToken)
         {
             Initial(accessToken);
             var response = await _httpClient.GetAsync(URL);
@@ -54,12 +55,12 @@ namespace PDE.DataAccess.Service
                 response.EnsureSuccessStatusCode();
 
                 var respnoseText = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<IEnumerable<Provincia>>(respnoseText);
+                var data = JsonConvert.DeserializeObject<IEnumerable<ProvinciaDto>>(respnoseText);
                 return data;
             }
             catch (HttpRequestException)
             {
-                return Enumerable.Empty<Provincia>();
+                return Enumerable.Empty<ProvinciaDto>();
             }
 
         }

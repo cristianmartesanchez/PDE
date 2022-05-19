@@ -1,4 +1,5 @@
-﻿using PDE.Models.Entities;
+﻿using PDE.Models.Dto;
+using PDE.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,6 @@ namespace PDE.Models.Interfaces.Padron
 {
     public interface IPadronRepository : IGenericRepository<P.Padron>
     {
-        public Task<Miembro> GetPadron(string cedula);
+        public Task<MiembroDto> GetPadron(string cedula);
     }
 }
