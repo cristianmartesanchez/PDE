@@ -32,7 +32,7 @@
          <!-- Navbar Search-->
 
          <div class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-             <div class="input-group">
+             <div class="input-group text-primary">
                  @User.Claims.FirstOrDefault(a => a.Type == "FullName").Value
              </div>
          </div>
@@ -88,10 +88,10 @@
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
-                        <div class="small">Logged in as:</div>
+                        <div class="small">Conectado como:</div>
                         @if(User.Identity.IsAuthenticated)
                         {
-                            <span class="">@User.Claims.FirstOrDefault(a => a.Type == "FullName").Value</span> 
+                            <span class="text-primary">@User.Claims.FirstOrDefault(a => a.Type == "FullName").Value</span> 
                         }
                     </div>
             </nav>
@@ -121,7 +121,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/js/scripts.js"></script>
     <script src="~/lib/DataTables/DataTables-1.11.5/js/jquery.dataTables.min.js" type="text/javascript" ></script>
-    @*<script src="~/js/site.js" type="text/javascript"></script>*@
+    <script src="~/js/site.js" type="text/javascript"></script>
    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
