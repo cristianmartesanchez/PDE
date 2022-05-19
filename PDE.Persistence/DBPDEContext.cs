@@ -40,6 +40,7 @@ namespace PDE.Persistence
         public virtual DbSet<Sexo> Sexos { get; set; } = null!;
         public virtual DbSet<Zona> Zonas { get; set; } = null!;
         public virtual DbSet<Estructura> Estructuras { get; set; } = null!;
+        public virtual DbSet<Metas> Metas { get; set; } = null!;
 
         public virtual DbSet<RegisterModel> RegisterModels { get; set; } = null!;
 

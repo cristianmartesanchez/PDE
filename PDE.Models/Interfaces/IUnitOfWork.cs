@@ -23,6 +23,7 @@ namespace PDE.Models.Interfaces
         ILocalidadRepository Localidad { get; set; }
         IProvinciaRepository Provincia { get; set; }
         IEstructuraRepository Estructura { get; set; }
+        IMetasRepository Metas { get; set; }
         Task Save();
     }
 }

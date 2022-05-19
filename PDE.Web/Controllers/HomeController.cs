@@ -19,13 +19,15 @@ namespace PDE.Web.Controllers
         private IMiembroService _miembroService;
         private IProvinciaService _provinciaService;
         private ICargoService _cargoService;
+        private IMetasService _metasService;
 
         public HomeController(IMiembroService miembroService, IProvinciaService provinciaService, 
-            ICargoService cargoService)
+            ICargoService cargoService, IMetasService metasService)
         {
             _miembroService = miembroService;
             _provinciaService = provinciaService;
             _cargoService = cargoService;
+            _metasService = metasService;
         }
 
         public async Task<IActionResult> Index()

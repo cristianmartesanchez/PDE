@@ -7,12 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PDE.Models\PDE.Models.csproj" />
-    <ProjectReference Include="..\PDE.Persistence\PDE.Persistence.csproj" />
+    <Compile Remove="Migrations\**" />
+    <EmbeddedResource Remove="Migrations\**" />
+    <None Remove="Migrations\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
+    <ProjectReference Include="..\PDE.Models\PDE.Models.csproj" />
+    <ProjectReference Include="..\PDE.Persistence\PDE.Persistence.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -27,6 +27,9 @@ namespace PDE.Models.AutoMapper
 
             CreateMap<Cargo, CargoDto>();
             CreateMap<CargoDto, Cargo>();
+
+            CreateMap<Metas, MetasDto>();
+            CreateMap<MetasDto, Metas>();
         }
     }
 }

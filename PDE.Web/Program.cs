@@ -14,7 +14,7 @@ using PDE.Persistence.Padron;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
-
+ConfigurationManager configuration = builder.Configuration;
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -34,14 +34,15 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 
-builder.Services.AddHttpClient<IMiembroService, MiembroService>(client => { client.BaseAddress = new Uri("https://localhost:7295/"); });
-builder.Services.AddHttpClient<IProvinciaService, ProvinciaService>(client => { client.BaseAddress = new Uri("https://localhost:7295/"); });
-builder.Services.AddHttpClient<ICargoService, CargoService>(client => { client.BaseAddress = new Uri("https://localhost:7295/"); });
-builder.Services.AddHttpClient<ICargosTerritorialesService, CargosTerritorialesService>(client => { client.BaseAddress = new Uri("https://localhost:7295/"); });
-builder.Services.AddHttpClient<ILocalidadService, LocalidadService>(client => { client.BaseAddress = new Uri("https://localhost:7295/"); });
-builder.Services.AddHttpClient<IPadronService, PadronService>(client => { client.BaseAddress = new Uri("https://localhost:7295/"); });
-builder.Services.AddHttpClient<IEstructuraService, EstructuraService>(client => { client.BaseAddress = new Uri("https://localhost:7295/"); });
-builder.Services.AddHttpClient<IAuthenticateService, AuthenticateService>(client => { client.BaseAddress = new Uri("https://localhost:7295/"); });
+builder.Services.AddHttpClient<IMiembroService, MiembroService>(client => { client.BaseAddress = new Uri(configuration["ApiBaseURI"]); });
+builder.Services.AddHttpClient<IProvinciaService, ProvinciaService>(client => { client.BaseAddress = new Uri(configuration["ApiBaseURI"]); });
+builder.Services.AddHttpClient<ICargoService, CargoService>(client => { client.BaseAddress = new Uri(configuration["ApiBaseURI"]); });
+builder.Services.AddHttpClient<ICargosTerritorialesService, CargosTerritorialesService>(client => { client.BaseAddress = new Uri(configuration["ApiBaseURI"]); });
+builder.Services.AddHttpClient<ILocalidadService, LocalidadService>(client => { client.BaseAddress = new Uri(configuration["ApiBaseURI"]); });
+builder.Services.AddHttpClient<IPadronService, PadronService>(client => { client.BaseAddress = new Uri(configuration["ApiBaseURI"]); });
+builder.Services.AddHttpClient<IEstructuraService, EstructuraService>(client => { client.BaseAddress = new Uri(configuration["ApiBaseURI"]); });
+builder.Services.AddHttpClient<IAuthenticateService, AuthenticateService>(client => { client.BaseAddress = new Uri(configuration["ApiBaseURI"]); });
+builder.Services.AddHttpClient<IMetasService, MetasService>(client => { client.BaseAddress = new Uri(configuration["ApiBaseURI"]); });
 
 var app = builder.Build();
 

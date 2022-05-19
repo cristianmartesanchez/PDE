@@ -30,6 +30,7 @@ namespace PDE.DataAccess
             Localidad = new LocalidadRepository(_context);
             Provincia = new ProvinciaRepository(_context);
             Estructura = new EstructuraRepository(_context);
+            Metas = new MetasRepository(_context);
         }
 
         public IPadronRepository Padron { get;  }
@@ -46,6 +47,7 @@ namespace PDE.DataAccess
         public ILocalidadRepository Localidad { get; set; }
         public IProvinciaRepository Provincia { get; set; }
         public IEstructuraRepository Estructura { get; set; }
+        public IMetasRepository Metas { get; set; }
 
         public void Dispose()
         {
