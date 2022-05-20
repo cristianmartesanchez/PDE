@@ -1,7 +1,7 @@
 ﻿$(function () {
 
     $("#SupervisorId").append('<option value="0" >--Seleccione un supervisor--</option>');
-    $("#CargoId").append('<option >--Seleccione un cargo territorial--</option>');
+    $("#CargoTerritorialId").append('<option>--Seleccione un Cargo Territorial--</option>');
 
     $("body").on("click", "#buscarCedula", function (e) {
 
@@ -33,34 +33,33 @@
             url: "/Miembros/GetCargosByLocalidad/",
             data: { localidadId: LocalidadId },
             //dataType: "Json"
-        })
-            .done(function (data) {
+        }).done(function (data) {
                 
-            if (data) {               
-                
-                $("#CargoId").find('option').remove();
-                $("#CargoId").append('<option >--Seleccione un cargo territorial--</option>');
+            if (data) {
+
+                $("#CargoTerritorialId").find('option').remove();
+                $("#CargoTerritorialId").append('<option >--Seleccione un Cargo Territorial--</option>');
                 $("#SupervisorId").find('option').remove();
                 $("#SupervisorId").append('<option value="0">--Seleccione un supervisor--</option>');
+
                 $(data).each(function (i, v) {
-                    $("#CargoId").append('<option value="' + v.cargo.id + '">' + v.cargo.descripcion + '</option>');
-                })
+                    $("#CargoTerritorialId").append('<option value="' + v.id + '">' + v.cargo.descripcion + '</option>');
+                });
 
             }
         });
 
     });
 
-    $("body").on("change", "#CargoId", function (e) {
+    $("body").on("change", "#CargoTerritorialId", function (e) {
 
         let cargoId = $(this).val();
         let localidadId = $("#LocalidadId").val();
-        let provinciaId = $("#ProvinciaId").val();
 
         $.ajax({
             method: "GET",
             url: "/Miembros/GetSupervisorByCargo/",
-            data: { CargoId: cargoId, LocalidadId: localidadId },
+            data: { CargoTerritorialId: cargoId, LocalidadId: localidadId },
             dataType: "Json"
         })
             .done(function (data) {

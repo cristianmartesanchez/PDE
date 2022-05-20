@@ -118,7 +118,7 @@ namespace PDE.Api.Controllers
             await _unitOfWork.Miembros.Add(data);
             await _unitOfWork.Save();
 
-            return CreatedAtAction("GetMiembro", new { id = miembro.Id }, miembro);
+            return CreatedAtAction("GetMiembro", new { id = data.Id }, data);
         }
 
         // DELETE: api/Miembros/5

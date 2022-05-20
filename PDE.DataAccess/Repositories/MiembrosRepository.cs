@@ -32,10 +32,11 @@ namespace PDE.DataAccess.Repositories
            
             var data =  (from a in _context.Miembros
                         join b in _context.Miembros on a.SupervisorId equals b.Id into c
-                        from d in c.DefaultIfEmpty()
-                        join e in _context.Estructuras on a.EstructuraId equals e.Id
-                        join i in _context.Cargos on a.CargoId equals i.Id
-                        join lo in _context.Localidads on a.LocalidadId equals lo.Id
+                        from d in c.DefaultIfEmpty()                        
+                        join i in _context.CargoTerritorials on a.CargoTerritorialId equals i.Id
+                        join car in _context.Cargos on i.CargoId equals car.Id
+                         join e in _context.Estructuras on i.EstructuraId equals e.Id
+                         join lo in _context.Localidads on i.LocalidadId equals lo.Id
                         join ec in _context.EstadoCiviles on a.EstadoCivilId equals ec.Id
                         join sx in _context.Sexos on a.SexoId equals sx.Id
                         join j in _context.Categorias on a.CategoriaId equals j.Id into k
@@ -57,7 +58,7 @@ namespace PDE.DataAccess.Repositories
                             Apellidos = a.Apellidos,
                             Cedula = a.Cedula,
                             Celular = a.Celular,
-                            CargoId = a.CargoId,
+                            CargoTerritorialId = i.Id,
                             SexoId = a.SexoId,
                             FechaNacimiento = a.FechaNacimiento,
                             LugarNacimiento = a.LugarNacimiento,
@@ -68,27 +69,32 @@ namespace PDE.DataAccess.Repositories
                             SupervisorId = a.SupervisorId,
                             CategoriaId = a.CategoriaId,
                             MunicipioId = a.MunicipioId,     
-                            LocalidadId = a.LocalidadId,
                             Supervisor = new MiembroDto
                             {
                                 Nombres = d.Nombres,
                                 Apellidos = d.Apellidos
                             },
-                            EstructuraId = a.EstructuraId,
-                            Estructura = new EstructuraDto
+                            CargoTerritorial = new CargoTerritorialDto
                             {
-                                Descripcion = e.Descripcion
-                            },
-                            Cargo = new CargoDto
-                            {
-                                Id = a.CargoId,
-                                Descripcion = i.Descripcion
-                            },
-
-                            Localidad = new LocalidadDto
-                            {
-                                Id = lo.Id,
-                                Nombre = lo.Nombre
+                                Id = i.Id,
+                                CargoId = i.CargoId,
+                                EstructuraId = i.EstructuraId,
+                                LocalidadId = i.LocalidadId,
+                                Cargo = new CargoDto
+                                {
+                                    Id = i.CargoId,
+                                    Descripcion = car.Descripcion
+                                },
+                                Estructura = new EstructuraDto
+                                {
+                                    Id = e.Id,
+                                    Descripcion = e.Descripcion
+                                },
+                                Localidad = new LocalidadDto
+                                {
+                                    Id = lo.Id,
+                                    Nombre = lo.Nombre
+                                }
                             },
 
                             Municipio = new MunicipioDto
@@ -161,7 +167,7 @@ namespace PDE.DataAccess.Repositories
         {
                        
             var miembros = GetMiembros();            
-            var data = await miembros.Where(a => a.CargoId == cargoId).ToListAsync();
+            var data = await miembros.Where(a => a.CargoTerritorial.CargoId == cargoId).ToListAsync();
 
             return data;
         }
@@ -169,11 +175,12 @@ namespace PDE.DataAccess.Repositories
         public async Task<IEnumerable<MiembroDto>> GetSupervisorByCargo(int CargoId, int LocalidadId)
         {
 
-            var miembros = await (from a in GetMiembros()
-                                  join b in _context.CargoTerritorials on a.CargoId equals b.CargoSupervisorId into c
-                                  from d in c.DefaultIfEmpty()
-                                  where d.CargoId == CargoId && d.LocalidadId == LocalidadId
-                                  select a).ToListAsync();
+            var miembros = await (from b in _context.CargoTerritorials
+                                  join e in _context.CargoTerritorials on b.CargoSupervisorId equals e.CargoId into f
+                                  from g in f.DefaultIfEmpty()
+                                  join h in GetMiembros() on g.Id equals h.CargoTerritorialId
+                                  where b.Id == CargoId
+                                  select h).ToListAsync();
 
             return miembros;
         }

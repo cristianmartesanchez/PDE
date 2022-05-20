@@ -1,4 +1,5 @@
-﻿using PDE.Models.Entities;
+﻿using PDE.Models.Dto;
+using PDE.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,8 @@ namespace PDE.Models.Interfaces
 {
     public interface ICargosTerritorialesRepository : IGenericRepository<CargoTerritorial>
     {
-        IQueryable<CargoTerritorial> GetCargosBySupervisor(int? cargoSupervisorId = null);
-        IQueryable<CargoTerritorial> GetCargoTerritoriales();
-        Task<IEnumerable<CargoTerritorial>> GetCargosByLocalidad(int LocalidadId);
+        IQueryable<CargoTerritorialDto> GetCargosBySupervisor(int? cargoSupervisorId = null);
+        IQueryable<CargoTerritorialDto> GetCargoTerritoriales();
+        Task<IEnumerable<CargoTerritorialDto>> GetCargosByLocalidad(int LocalidadId);
     }
 }

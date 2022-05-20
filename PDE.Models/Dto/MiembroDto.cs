@@ -26,12 +26,10 @@ namespace PDE.Models.Dto
         public int? NacionalidadId { get; set; }
         public int? MunicipioId { get; set; }
         public int? ColegioId { get; set; }
-        public int LocalidadId { get; set; }
-        public int CargoId { get; set; }
-        public int EstructuraId { get; set; }   
+        public int CargoTerritorialId { get; set; }
 
-        public virtual CargoDto Cargo { get; set; } = null!;
-        public virtual EstructuraDto Estructura { get; set; } = null!;
+
+        public virtual CargoTerritorialDto CargoTerritorial { get; set; } = null!;
         public virtual CategoriaDto Categoria { get; set; } = null!;
         public virtual ColegioDto Colegio { get; set; } = null!;
         public virtual EstadoCivilDto EstadoCivil { get; set; } = null!;
@@ -40,7 +38,6 @@ namespace PDE.Models.Dto
         public virtual OcupacionDto Ocupacion { get; set; } = null!;
         public virtual SexoDto Sexo { get; set; } = null!;
         public virtual MiembroDto Supervisor { get; set; } = null!;
-        public virtual LocalidadDto Localidad { get; set; } = null!;
         public virtual ICollection<MiembroDto> InverseSupervisor { get; set; } = null!;
     }
 }

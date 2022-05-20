@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PDE.DataAccess;
+using PDE.Models.Dto;
 using PDE.Models.Entities;
 using PDE.Models.Interfaces;
 using PDE.Models.Service;
@@ -60,7 +61,7 @@ namespace PDE.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CargoTerritorial cargoTerritorial)
+        public async Task<IActionResult> Create(CargoTerritorialDto cargoTerritorial)
         {
             if (ModelState.IsValid)
             {
@@ -94,7 +95,7 @@ namespace PDE.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, CargoTerritorial cargoTerritorial)
+        public async Task<IActionResult> Edit(int id, CargoTerritorialDto cargoTerritorial)
         {
             if (id != cargoTerritorial.Id)
             {

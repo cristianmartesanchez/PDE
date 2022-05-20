@@ -33,21 +33,21 @@ namespace PDE.Api.Controllers
         public async Task<IEnumerable<CargoTerritorialDto>> GetCargosTerritoriales()
         {
             var cargoTerritorial = await _unitOfWork.CargosTerritoriales.GetCargoTerritoriales().ToListAsync();
-            return _mapper.Map<IEnumerable<CargoTerritorialDto>>(cargoTerritorial);
+            return cargoTerritorial;
         }
 
         [HttpGet("GetCargosBySupervisor/{supervisorId}")]
         public async Task<IEnumerable<CargoTerritorialDto>> GetCargosBySupervisor(int supervisorId)
         {
             var cargosTerritoriales = await _unitOfWork.CargosTerritoriales.GetCargosBySupervisor(supervisorId).ToListAsync();
-            return _mapper.Map<IEnumerable<CargoTerritorialDto>>(cargosTerritoriales);
+            return cargosTerritoriales;
         }
 
         [HttpGet("GetCargosByLocalidad/{localidadId}")]
         public async Task<IEnumerable<CargoTerritorialDto>> GetCargosByLocalidad(int localidadId)
         {
             var cargosTerritoriales = await _unitOfWork.CargosTerritoriales.GetCargosByLocalidad(localidadId);
-            return _mapper.Map<IEnumerable<CargoTerritorialDto>>(cargosTerritoriales);
+            return cargosTerritoriales;
         }
 
         // GET: api/CargoTerritorials/5
