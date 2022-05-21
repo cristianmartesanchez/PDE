@@ -49,16 +49,15 @@ namespace PDE.Web.Controllers
             return View(data);
         }
 
-        async void DropDown(int cargoTerritorialId = 0)
+        async void DropDown(int cargoId = 0, int localidadId = 0)
         {
             var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
             var cargo = User.Claims.FirstOrDefault(a => a.Type == "CargoId");
 
             var cargos = await _cargosTerritoriales.GetAll($"api/CargoTerritorials/GetCargosBySupervisor/{cargo.Value}",token.Value);
-            ViewBag.Cargos = new SelectList(cargos, "Id", "Cargo.Descripcion", cargoTerritorialId);
+            ViewBag.Cargos = new SelectList(cargos, "CargoId", "Cargo.Descripcion", cargoId);
 
             var localidad = await _localidadService.GetAll($"api/Localidad/", token.Value);
-            var localidadId = cargos?.FirstOrDefault(a => a.Id == cargoTerritorialId)?.LocalidadId;
             ViewBag.Localidades = new SelectList(localidad, "Id","Nombre", localidadId);
 
         }
@@ -73,10 +72,10 @@ namespace PDE.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetSupervisorByCargo(int CargoTerritorialId, int LocalidadId)
+        public async Task<JsonResult> GetSupervisorByCargo(int CargoId, int LocalidadId)
         {
             var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
-            var url = $"{UrlBase}GetSupervisorByCargo/{CargoTerritorialId}/{LocalidadId}";
+            var url = $"{UrlBase}GetSupervisorByCargo/{CargoId}/{LocalidadId}";
             var data = await _miembroService.GetAll(url, token.Value);
 
             return Json(data);
@@ -86,9 +85,7 @@ namespace PDE.Web.Controllers
         public async Task<IActionResult> ConsultarPadron(string cedula)
         {
             var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
-            var localidad = await _localidadService.GetAll($"api/Localidad/", token.Value);
-            ViewBag.Localidades = new SelectList(localidad, "Id", "Nombre");
-
+            DropDown();
             var data = await _miembroService.Get($"api/Padron/GetByCedula/{cedula}", token.Value);
             return PartialView("partial/_createForm", data);
         }
@@ -127,15 +124,15 @@ namespace PDE.Web.Controllers
             {
                 miembro.SupervisorId = miembro.SupervisorId == 0 ? null : miembro.SupervisorId;
 
-               // var data = await _cargosTerritoriales.GetAll("api/CargoTerritorials/", token.Value);
-                //var estructura = data.FirstOrDefault(a => a.Id == miembro.CargoTerritorialId); 
-                //&& a.LocalidadId == miembro.LocalidadId);
+                var data = await _cargosTerritoriales.GetAll("api/CargoTerritorials/", token.Value);
+                var estructura = data.FirstOrDefault(a => a.CargoId == miembro.CargoId 
+                && a.LocalidadId == miembro.LocalidadId);
 
                 var exists = await _miembroService.Get($"{UrlBase}GetMiembroByCedula/{miembro.Cedula}", token.Value);
                 if (exists == null)
                 {
 
-                    //miembro.EstructuraId = estructura.EstructuraId;
+                    miembro.EstructuraId = estructura.EstructuraId;
 
                    var nuevoMiembro = await _miembroService.Post(UrlBase,miembro, token.Value);
 
@@ -147,7 +144,7 @@ namespace PDE.Web.Controllers
                             Celular = nuevoMiembro.Celular,
                             Cedula = nuevoMiembro.Cedula,
                             MiembroId = nuevoMiembro.Id,
-                            CargoId = nuevoMiembro.CargoTerritorialId,
+                            CargoId = nuevoMiembro.CargoId,
                             Nombres = nuevoMiembro.Nombres,
                             Apellidos = nuevoMiembro.Apellidos
                         };
@@ -179,7 +176,7 @@ namespace PDE.Web.Controllers
                 return NotFound();
             }            
 
-            DropDown(miembro.CargoTerritorialId);
+            DropDown(miembro.CargoId,miembro.LocalidadId);
             return View(miembro);
         }
 
@@ -200,9 +197,9 @@ namespace PDE.Web.Controllers
                 {
 
                     var data = await _cargosTerritoriales.GetAll("api/CargoTerritorials/", token.Value);
-                    //var estructura = data.FirstOrDefault(a => a.CargoId == miembro.CargoId
-                    //&& a.LocalidadId == miembro.LocalidadId);
-                    //miembro.EstructuraId = estructura.EstructuraId;
+                    var estructura = data.FirstOrDefault(a => a.CargoId == miembro.CargoId
+                    && a.LocalidadId == miembro.LocalidadId);
+                    miembro.EstructuraId = estructura.EstructuraId;
 
                     await _miembroService.Put($"{UrlBase}{id}",miembro, token.Value);
 
@@ -220,7 +217,7 @@ namespace PDE.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            DropDown(miembro.CargoTerritorialId);
+            DropDown(miembro.CargoId,miembro.LocalidadId);
             return View(miembro);
         }
 

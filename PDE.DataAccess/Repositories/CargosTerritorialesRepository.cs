@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PDE.Models.Dto;
 using PDE.Models.Entities;
 using PDE.Models.Interfaces;
 using PDE.Persistence;
@@ -19,7 +18,7 @@ namespace PDE.DataAccess.Repositories
             _context = context;
         }
 
-        public IQueryable<CargoTerritorialDto> GetCargoTerritoriales()
+        public IQueryable<CargoTerritorial> GetCargoTerritoriales()
         {
             var data = from a in _context.CargoTerritorials
                        join b in _context.Cargos on a.CargoId equals b.Id
@@ -27,28 +26,25 @@ namespace PDE.DataAccess.Repositories
                        from e in d.DefaultIfEmpty()
                        join f in _context.Localidads on a.LocalidadId equals f.Id
                        join g in _context.Estructuras on a.EstructuraId equals g.Id
-                       select new CargoTerritorialDto
+                       select new CargoTerritorial
                        {
                            Id = a.Id,
                            CargoId = a.CargoId,
                            CargoSupervisorId = a.CargoSupervisorId,
                            EstructuraId = a.EstructuraId,
-                           Cargo = new CargoDto
+                           Cargo = new Cargo
                            {
                                Id = b.Id,
                                Descripcion = b.Descripcion
                            },
-                           CargoSupervisor = new CargoDto
-                           {
-                               Descripcion = e.Descripcion
-                           },
+                           CargoSupervisor = e,
                            LocalidadId = a.LocalidadId,
-                           Localidad = new LocalidadDto
+                           Localidad = new Localidad
                            {
                                Id = f.Id,
                                Nombre = f.Nombre
                            },
-                           Estructura = new EstructuraDto
+                           Estructura = new Estructura
                            {
                                Id = g.Id,
                                Descripcion = g.Descripcion
@@ -58,7 +54,7 @@ namespace PDE.DataAccess.Repositories
             return data;
         }
 
-        public IQueryable<CargoTerritorialDto> GetCargosBySupervisor(int? cargoSupervisorId = null)
+        public IQueryable<CargoTerritorial> GetCargosBySupervisor(int? cargoSupervisorId = null)
         {
 
             var cargos = GetCargoTerritoriales();
@@ -69,7 +65,7 @@ namespace PDE.DataAccess.Repositories
 
         }
 
-        public async Task<IEnumerable<CargoTerritorialDto>> GetCargosByLocalidad(int LocalidadId)
+        public async Task<IEnumerable<CargoTerritorial>> GetCargosByLocalidad(int LocalidadId)
         {
             var cargos = await GetCargoTerritoriales().ToListAsync();
             var data =   cargos.Where(a => a.LocalidadId == LocalidadId).DistinctBy(a => a.CargoId);

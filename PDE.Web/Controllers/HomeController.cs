@@ -38,9 +38,9 @@ namespace PDE.Web.Controllers
             var provincias = await _provinciaService.GetAll($"{UrlBase}GetProvincias", token.Value);
 
             ViewBag.Provincias = new SelectList(provincias, "Id", "Descripcion");
-            double pleno = miembros.Count(a => a.CargoTerritorial.EstructuraId == 1);
-            double pais = miembros.Count(a => a.CargoTerritorial.EstructuraId == 2);
-            double exterior = miembros.Count(a => a.CargoTerritorial.EstructuraId == 3);
+            double pleno = miembros.Count(a => a.EstructuraId == 1);
+            double pais = miembros.Count(a => a.EstructuraId == 2);
+            double exterior = miembros.Count(a => a.EstructuraId == 3);
 
             ViewBag.Totales = new
             {
@@ -75,11 +75,11 @@ namespace PDE.Web.Controllers
             }
             else if(estructuraId != 0)
             {
-                data = data.Where(a => a.CargoTerritorial.EstructuraId == estructuraId);
+                data = data.Where(a => a.EstructuraId == estructuraId);
 
                 if(cargoId != 0)
                 {
-                    data = data.Where(a => a.CargoTerritorial.CargoId == cargoId);
+                    data = data.Where(a => a.CargoId == cargoId);
                 }
             }
             else if(provinciaId != 0)
