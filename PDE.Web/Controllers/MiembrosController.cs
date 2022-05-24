@@ -85,7 +85,11 @@ namespace PDE.Web.Controllers
         public async Task<IActionResult> ConsultarPadron(string cedula)
         {
             var token = User.Claims.FirstOrDefault(a => a.Type == "Token");
-            DropDown();
+            //DropDown();
+
+            var localidad = await _localidadService.GetAll($"api/Localidad/", token.Value);
+            ViewBag.Localidades = new SelectList(localidad, "Id", "Nombre");
+
             var data = await _miembroService.Get($"api/Padron/GetByCedula/{cedula}", token.Value);
             return PartialView("partial/_createForm", data);
         }
