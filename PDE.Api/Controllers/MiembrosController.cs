@@ -114,11 +114,21 @@ namespace PDE.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<MiembroDto>> PostMiembro(MiembroDto miembro)
         {
-            var data = _mapper.Map<Miembro>(miembro);
-            await _unitOfWork.Miembros.Add(data);
-            await _unitOfWork.Save();
+            try
+            {
+                var data = _mapper.Map<Miembro>(miembro);
+                await _unitOfWork.Miembros.Add(data);
+                await _unitOfWork.Save();
+                var nuevoMiembro = _mapper.Map<MiembroDto>(data);
+                return CreatedAtAction("GetMiembro", new { id = nuevoMiembro.Id }, nuevoMiembro);
+            }
+            catch (Exception ex)
+            {
 
-            return CreatedAtAction("GetMiembro", new { id = miembro.Id }, miembro);
+                throw;
+            }
+
+           
         }
 
         // DELETE: api/Miembros/5

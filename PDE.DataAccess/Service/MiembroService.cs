@@ -84,7 +84,7 @@ namespace PDE.DataAccess.Service
                 var data = JsonConvert.DeserializeObject<MiembroDto>(respnoseText);
                 return data;
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException ex)
             {
                 return null;
             }

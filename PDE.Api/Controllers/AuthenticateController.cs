@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace PDE.Api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthenticateController : ControllerBase
