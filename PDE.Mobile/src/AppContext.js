@@ -4,27 +4,40 @@ import axios from 'axios';
 const AppContext = React.createContext();
 
 export function AppProvider(props){
-    const usuario = "prueba exitosa";
-    let url = "https://localhost:7295\\api\\";
+    const [usuario, setUsuario] = useState(null);
+    const [token, setToken] = useState(null);
+    const [expiration, setExpiration] = useState(null);
+    const url = "http://10.0.0.8:5050/api/";
 
     function logIn(username, password)
     {
-	let _url = url+="authenticate\\login"
-	axios.post(_url,{"username": username, "password": password})
-	.then(resp => console.log(resp.data));
+	let _url = url+"authenticate/login";
+	axios.post(_url, {username, password})
+	.then(resp => {
+	    setUsuario(JSON.parse(resp.data.user));
+	    setToken(resp.data.token);
+	    setExpiration(resp.data.expiration);
+	})
+	.catch(err => console.log(error));
     }
 
     function logOut()
-    {}
+    {
+	setUsuario(null);
+	setToken(null);
+	setExpiration(null);
+    }
 
     const value = useMemo(() =>
 	{
 	    return({
 		usuario,
+		token,
+		expiration,
 		logIn,
 		logOut
 	    })
-	}, [usuario]);
+	}, [usuario, token, expiration]);
 
     return <AppContext.Provider value={value} {...props} />
 }

@@ -1,14 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import { useEffect } from 'react';
 import { AppProvider, useApp } from './src/AppContext';
 
 function App() {
-    let { logIn } = useApp();
-    logIn("40226944128", "Pde@40226944128");
+    let { logIn, usuario } = useApp();
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <Text>{usuario ? usuario.Nombres : ""} {usuario ? usuario.Apellidos : ""}</Text>
       <StatusBar style="auto" />
+      <Button title="LogIn" onPress={()=> logIn("40226944128", "Pde@40226944128")}/>
     </View>
   );
 }
