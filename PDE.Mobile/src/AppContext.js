@@ -6,8 +6,8 @@ const AppContext = React.createContext();
 export function AppProvider(props){
     const [usuario, setUsuario] = useState(null);
     const [token, setToken] = useState(null);
-    const [expiration, setExpiration] = useState(null);
-    const url = "http://10.0.0.8:5050/api/";
+    const [expirationDate, setExpirationDate] = useState(null);
+    const url = "http://10.0.0.8:5295/api/";
 
     function logIn(username, password)
     {
@@ -16,7 +16,7 @@ export function AppProvider(props){
 	.then(resp => {
 	    setUsuario(JSON.parse(resp.data.user));
 	    setToken(resp.data.token);
-	    setExpiration(resp.data.expiration);
+	    setExpirationDate(resp.data.expiration);
 	})
 	.catch(err => console.log(error));
     }
@@ -33,11 +33,11 @@ export function AppProvider(props){
 	    return({
 		usuario,
 		token,
-		expiration,
+		expirationDate,
 		logIn,
 		logOut
 	    })
-	}, [usuario, token, expiration]);
+	}, [usuario, token, expirationDate]);
 
     return <AppContext.Provider value={value} {...props} />
 }
