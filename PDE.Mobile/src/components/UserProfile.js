@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { DrawerItem, DrawerContentScrollView, } from '@react-navigation/drawer';
-import { useTheme, Avatar, Title, Caption, Paragraph, Drawer, Text, TouchableRipple, Switch, } from 'react-native-paper';
+import {  Avatar, Title, Caption,  Drawer, Text, TouchableRipple, Switch, } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useApp } from '../AppContext';
 
@@ -10,20 +10,20 @@ export default function UserProfile(props) {
   const { usuario } = useApp();
 
   return (
-    <DrawerContentScrollView {...props}>
+    <DrawerContentScrollView>
       <View style={ styles.drawerContent }>
 
         <View style={styles.userInfoSection}>
-          <Avatar.Image source={{ uri: '', }} size={50} />
+          <Avatar.Image source={ require('../../assets/userDefault.png')} size={50} />
           <Title style={styles.title}>{usuario.Nombres} {usuario.Apellidos}</Title>
       	  <Caption style={styles.caption}>Aqui va el cargo</Caption>
         </View>
 
         <Drawer.Section style={styles.drawerSection}>
-          <DrawerItem icon={({ color, size }) => (<MaterialCommunityIcons name="application-outline" color={color} size={size} />)} label="Dashboard" />
-          <DrawerItem icon={({ color, size }) => (<MaterialCommunityIcons name="account-multiple" color={color} size={size} /> )} label="Miembros" />
-          <DrawerItem icon={({ color, size }) => (<MaterialCommunityIcons name="family-tree" color={color} size={size} /> )} label="Cargos" />
-          <DrawerItem icon={({ color, size }) => (<MaterialCommunityIcons name="terraform" color={color} size={size} /> )} label="Cargos Territoriales" />
+          <DrawerItem icon={({ color, size }) => (<MaterialCommunityIcons name="application-outline" color={color} size={size} />)} label="Dashboard" onPress={()=>{props.navigation.navigate("Dashboard");}} />
+          <DrawerItem icon={({ color, size }) => (<MaterialCommunityIcons name="account-multiple" color={color} size={size} /> )} label="Miembros" onPress={()=>{props.navigation.navigate('Miembros')}}/>
+          <DrawerItem icon={({ color, size }) => (<MaterialCommunityIcons name="family-tree" color={color} size={size} /> )} label="Cargos" onPress={()=>{props.navigation.navigate('Cargos')}}/>
+          <DrawerItem icon={({ color, size }) => (<MaterialCommunityIcons name="terraform" color={color} size={size} /> )} label="Cargos Territoriales" onPress={()=>{props.navigation.navigate('CargosTerritoriales')}}/>
         </Drawer.Section>
         
         <Drawer.Section title="Preferences"> 
