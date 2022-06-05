@@ -44,8 +44,6 @@ export function AppProvider(props){
 	{
 	    return({
 		usuario,
-		token,
-		expirationDate,
 		logIn,
 		logOut
 	    })
