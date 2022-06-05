@@ -3,6 +3,14 @@ import axios from 'axios';
 
 const AppContext = React.createContext();
 
+function stringDateToObject(value)
+{
+    let arr1 = value.split("T");
+    let arr2 = arr1[0].split("-");
+    let arr3 = arr1[1].split(":");
+    return new Date(arr2[0], arr2[1]-1, arr2[2], arr3[0]-4, arr3[1], arr3[2].replace('Z', ''));
+}
+
 export function AppProvider(props){
     const [usuario, setUsuario] = useState(null);
     const [token, setToken] = useState(null);
@@ -16,7 +24,7 @@ export function AppProvider(props){
 	.then(resp => {
 	    setUsuario(JSON.parse(resp.data.user));
 	    setToken(resp.data.token);
-	    setExpirationDate(resp.data.expiration);
+	    setExpirationDate(stringDateToObject(resp.data.expiration));
 	})
 	.catch(err => console.log(error));
     }
@@ -25,8 +33,14 @@ export function AppProvider(props){
     {
 	setUsuario(null);
 	setToken(null);
-	setExpiration(null);
+	setExpirationDate(null);
     }
+
+    useEffect(()=>{
+	if(expirationDate === new Date()) logOut();
+    });
+
+    console.log(expirationDate);
 
     const value = useMemo(() =>
 	{
