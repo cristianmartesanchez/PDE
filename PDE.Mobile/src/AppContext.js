@@ -40,8 +40,6 @@ export function AppProvider(props){
 	if(expirationDate === new Date()) logOut();
     });
 
-    console.log(expirationDate);
-
     const value = useMemo(() =>
 	{
 	    return({
