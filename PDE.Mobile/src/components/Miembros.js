@@ -1,12 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, SafeAreaView, SectionList, StatusBar } from "react-native";
 import { FAB } from 'react-native-paper';
-
-const DATA = [
-  {
-    data: ["Pizza", "Burger", "Risotto", "Calzoni", "ChickenBaque", "IceCream", "CheeseCacke", "Rize", "Milk", "Beans"]
-  },
-];
+import { useData } from '../DataContext';
 
 const Item = ({ title }) => (
   <View style={styles.item}>
@@ -14,21 +9,25 @@ const Item = ({ title }) => (
   </View>
 );
 
-const Miembros = () => (
-  <SafeAreaView style={styles.container}>
-    <SectionList
-      sections={DATA}
-      keyExtractor={(item, index) => item + index}
-      renderItem={({ item }) => <Item title={item} />}
-    />
-    <FAB
-      style={styles.fab}
-      small
-      icon="plus"
-      onPress={() => console.log('Pressed')}
-      />
-  </SafeAreaView>
-);
+const Miembros = () => {
+    const {miembros} = useData();
+    const DATA = [{data: miembros.list}];
+    return (
+	  <SafeAreaView style={styles.container}>
+	    <SectionList
+	      sections={DATA}
+	      keyExtractor={(item, index) => item + index}
+	      renderItem={({ item }) => <Item title={item} />}
+	    />
+	    <FAB
+	      style={styles.fab}
+	      small
+	      icon="plus"
+	      onPress={() => console.log('Pressed')}
+	      />
+	  </SafeAreaView>
+    );
+}
 
 const styles = StyleSheet.create({
   container: {

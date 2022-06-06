@@ -15,7 +15,7 @@ export function AppProvider(props){
     const [usuario, setUsuario] = useState(null);
     const [token, setToken] = useState(null);
     const [expirationDate, setExpirationDate] = useState(null);
-    const url = "http://10.0.0.8:5295/api/";
+    const url = "http://192.168.137.1:5295/api/";
 
     function logIn(username, password)
     {

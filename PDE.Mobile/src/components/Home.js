@@ -1,13 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, SafeAreaView, SectionList, StatusBar } from "react-native";
 import { FAB } from 'react-native-paper';
-
-const DATA = [
-  {
-    title: "Miembros",
-    data: ["Pizza", "Burger", "Risotto", "Calzoni", "ChickenBaque", "IceCream", "CheeseCacke", "Rize", "Milk", "Beans"]
-  },
-];
+import { useData } from '../DataContext';
 
 const Item = ({ title }) => (
   <View style={styles.item}>
@@ -15,7 +9,10 @@ const Item = ({ title }) => (
   </View>
 );
 
-const Home = () => (
+const Home = () => {
+    const { miembros } = useData();
+    const DATA = [{ title: "Miembros", data: miembros.list}];
+    return (
   <SafeAreaView style={styles.container}>
      <SectionList
        sections={DATA}
@@ -32,7 +29,8 @@ const Home = () => (
       onPress={() => console.log('Pressed')}
       />
   </SafeAreaView>
-);
+    );
+}
 
 const styles = StyleSheet.create({
   container: {
